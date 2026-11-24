@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AiMentor Master Timeline · Page 2 · Checkpoints</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1d4ed8}a:hover{color:#1e3a8a}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.scrollx{overflow-x:auto}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #14171c; background: #ffffff; max-width: 1360px; margin: 0 auto; padding: 40px 40px 64px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; font-weight: 600; color: #4b5563; border-bottom: 1px solid #d1d5db; padding-bottom: 10px"><span>AiMentor · Master timeline</span><span>Page 2 of 4 · Checkpoints</span></div>
+
+<!-- 2. CHECKPOINTS -->
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px">2 · Checkpoints and what “done” means</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px">
+    <sc-for list="{{cps}}" as="c" hint-placeholder-count="7">
+      <div style="border: 1px solid #d1d5db; border-top: 6px solid {{c.color}}; border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline"><b style="font-family: 'Space Grotesk', sans-serif; font-size: 20px">{{c.id}} · {{c.name}}</b><span style="font-size: 13px; color: #4b5563; white-space: nowrap">D{{c.day}} · {{c.date}}</span></div>
+        <div style="font-size: 13px; color: #374151"><b>Assessed by:</b> {{c.how}}</div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.45">
+          <sc-for list="{{c.dod}}" as="x" hint-placeholder-count="3"><li>{{x}}</li></sc-for>
+        </ul>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+
+  renderVals() {
+
+const C = { M0:'#4b5563', M1:'#1d4ed8', M2:'#0f766e', M3:'#c2410c', M4:'#6d28d9', M5:'#b42318', M6:'#15803d' };
+const dates = ['30 Nov','1 Dec','2 Dec','3 Dec','4 Dec','7 Dec','8 Dec','9 Dec','10 Dec','11 Dec','14 Dec','15 Dec','16 Dec','17 Dec','18 Dec'];
+
+const cps = [
+  { id:'CP0', name:'Onboarded', day:2, mod:'M0', how:'mentor sign-off', dod:['Repo, first PR, Jira and Confluence ready','Go build, test and golangci-lint run locally'] },
+  { id:'CP1', name:'Contract & Core API', day:5, mod:'M1', how:'Module 1 exam', dod:['100% of APIs defined in OpenAPI 3.0 & JSON Schema','oapi-codegen v2 code with zero manual edits','Gin standardized middleware and error handling','go lint, build, test pass; coverage meets team threshold'] },
+  { id:'CP2', name:'Data & Encryption', day:8, mod:'M2', how:'Module 2 exam', dod:['AWS SDK for Go integrated with RDS, DynamoDB, S3','Sensitive data/PII encrypted and decrypted with AWS KMS','Zero hardcoded keys or secrets'] },
+  { id:'CP3', name:'Async & Event-Driven', day:10, mod:'M3', how:'Module 3 exam', dod:['Events published and consumed via EventBridge, SNS, SQS, Scheduler','SQS and EventBridge consumers strictly idempotent','Every queue has an SQS DLQ with active alerting'] },
+  { id:'CP4', name:'Gateway, Network & Security', day:12, mod:'M4', how:'Module 4 exam', dod:['Zero hardcoded secrets; Secrets Manager, Parameter Store, AppConfig used by scope','Least-privilege IAM enforced','Private subnets (VPC, Subnets, SGs) with PrivateLink / VPC Endpoints and Megaport','Kong enforces routing, authentication, rate limiting; Apigee Edge traffic migrated','Cognito and Route 53 secure access; CloudTrail auditing on'] },
+  { id:'CP5', name:'Runtime, IaC & CI/CD', day:14, mod:'M5', how:'Module 5 exam', dod:['100% of infrastructure in CloudFormation, zero drift','Multi-stage, non-root Docker on ECS/Lambda, zero critical/high vulnerabilities','Automated deployments via GitHub, GitHub Actions, Buildkite'] },
+  { id:'CP6', name:'Quality, Observability & Ops', day:15, mod:'M6', how:'Module 6 exam + demo', dod:['go lint, build, test 100% pass in CI','Trace/correlation IDs end to end across Datadog (APM, Logs, RUM, Metrics) and CloudWatch','Dashboards configured, PagerDuty alerts active','Runbooks in Confluence/Rovo, tasks tracked in Jira'] }
+].map(c => ({ ...c, color: C[c.mod], date: dates[c.day - 1] }));
+
+    return { cps };
+  }
+}
+</script>
+</body>
+</html>

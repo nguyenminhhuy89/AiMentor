@@ -1,0 +1,122 @@
+- application [ref=e1]:
+  - iframe [aria-hidden] [ref=e2]
+  - iframe [aria-hidden] [ref=e3]
+  - banner "Thanh trình đơn" [ref=e4]:
+    - generic [ref=e7]:
+      - link "Trang chủ Trang tính" [ref=e9] [cursor=pointer]:
+        - /url: https://docs.google.com/spreadsheets/u/0/?authuser=0&usp=sheets_web
+      - generic [ref=e16]:
+        - generic "AiMentor Daily Progress Report - TEMPLATE" [ref=e18]:
+          - generic [ref=e19]:
+            - generic: AiMentor Daily Progress Report - TEMPLATE
+            - textbox "Đổi tên" [ref=e21]: AiMentor Daily Progress Report - TEMPLATE
+          - generic [ref=e22]:
+            - checkbox "Gắn dấu sao" [ref=e24] [cursor=pointer]
+            - 'button "Trạng thái của tài liệu: Đã lưu vào Drive." [ref=e28]':
+              - generic [ref=e29] [cursor=pointer]: Đã lưu vào Drive
+        - generic [ref=e36]:
+          - button "Chỉnh sửa lần cuối 58 phút trước" [ref=e38] [cursor=pointer]
+          - button "Hiện tất cả nhận xét" [ref=e42] [cursor=pointer]
+          - button "Tham gia cuộc gọi tại đây hoặc trình bày thẻ này trong cuộc gọi" [ref=e46] [cursor=pointer]
+          - generic [ref=e51]:
+            - button "Chia sẻ. Bất kỳ ai có đường liên kết. Bất kỳ ai có đường liên kết đều có thể truy cập. Không yêu cầu đăng nhập." [ref=e52] [cursor=pointer]: Chia sẻ
+            - button "Thao tác chia sẻ nhanh" [ref=e54] [cursor=pointer]
+          - generic [ref=e59]:
+            - link "Nâng cấp" [ref=e61] [cursor=pointer]
+            - tooltip [aria-hidden] [ref=e64]: Nâng cấp để dùng các tính năng nâng cao
+          - generic [ref=e67]:
+            - generic:
+              - button "Dùng thử Gemini" [ref=e74] [cursor=pointer]
+              - tooltip [aria-hidden] [ref=e77]: Dùng thử Gemini
+          - 'button "Tài khoản Google: chia se anh (chiaseanhneonguyen@gmail.com)" [ref=e80] [cursor=pointer]'
+    - generic [ref=e82]:
+      - menubar [ref=e84]:
+        - menuitem "Tệp" [ref=e85] [cursor=pointer]
+        - menuitem "Chỉnh sửa" [ref=e86] [cursor=pointer]
+        - menuitem "Xem" [ref=e87] [cursor=pointer]
+        - menuitem "Chèn" [ref=e88] [cursor=pointer]
+        - menuitem "Định dạng" [ref=e89] [cursor=pointer]
+        - menuitem "Dữ liệu" [ref=e90] [cursor=pointer]
+        - menuitem "Công cụ" [ref=e91] [cursor=pointer]
+        - menuitem "Tiện ích" [ref=e92] [cursor=pointer]
+        - menuitem "Trợ giúp" [ref=e93] [cursor=pointer]
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - button "Tìm kiếm trong menu (Tùy chọn+/)" [ref=e97] [cursor=pointer]
+            - combobox "Trình đơn" [ref=e99]
+          - toolbar "Số điện thoại chính" [ref=e100]:
+            - button "Hoàn tác (⌘Z)" [ref=e101] [cursor=pointer]
+            - button "Làm lại (⌘Y)" [ref=e106] [cursor=pointer]
+            - button "In (⌘P)" [ref=e111] [cursor=pointer]
+            - button "Sao chép định dạng" [ref=e116] [cursor=pointer]
+            - combobox "Thu phóng" [ref=e121] [cursor=pointer]:
+              - generic "Danh sách Thu phóng. 100% được chọn." [ref=e124]:
+                - textbox "Thu phóng" [ref=e125]: 100%
+            - separator [disabled] [ref=e129]
+            - button "Định dạng theo tiền tệ" [ref=e130] [cursor=pointer]:
+              - generic [ref=e131]: ₫
+            - button "Định dạng theo phần trăm" [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]: "%"
+            - button "Giảm số chữ số thập phân" [ref=e136] [cursor=pointer]
+            - button "Tăng số chữ số thập phân" [ref=e141] [cursor=pointer]
+            - button "Định dạng khác" [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]: "123"
+            - separator [disabled] [ref=e150]
+            - listbox "Phông chữ" [ref=e151] [cursor=pointer]:
+              - option "Danh sách Phông chữ. Arial được chọn." [selected] [ref=e154]: Arial
+            - separator [disabled] [ref=e158]
+            - button "Giảm cỡ chữ (⌘+Shift+dấu phẩy)" [ref=e159] [cursor=pointer]
+            - combobox "Cỡ chữ" [ref=e164] [cursor=pointer]:
+              - generic "Danh sách Cỡ chữ. 16 được chọn." [ref=e167]:
+                - textbox "Cỡ chữ" [ref=e168]: "16"
+            - button "Tăng cỡ chữ (⌘+Shift+dấu chấm)" [ref=e169] [cursor=pointer]
+            - separator [disabled] [ref=e174]
+            - button "In đậm (⌘B)" [pressed] [ref=e175] [cursor=pointer]
+            - button "In nghiêng (⌘I)" [ref=e180] [cursor=pointer]
+            - button "Gạch ngang chữ (⌘+Shift+X)" [ref=e185] [cursor=pointer]
+            - button "Màu văn bản" [ref=e190] [cursor=pointer]
+            - separator [disabled] [ref=e197]
+            - button "Tô màu" [ref=e198] [cursor=pointer]
+            - button "Đường viền" [ref=e205] [cursor=pointer]
+            - button "Hợp nhất ô" [disabled] [ref=e211]
+            - button "Chọn loại hợp nhất…" [disabled] [ref=e216]
+            - separator [disabled] [ref=e222]
+            - button "Căn ngang" [ref=e223] [cursor=pointer]
+            - button "Căn dọc" [ref=e232] [cursor=pointer]
+            - button "Xuống dòng tự động" [ref=e241] [cursor=pointer]
+            - button "Xoay văn bản" [ref=e250] [cursor=pointer]
+            - separator [disabled] [ref=e259]
+            - button "Thêm" [ref=e260] [cursor=pointer]
+        - toolbar "Chế độ và chế độ xem" [ref=e267]:
+          - button "Ẩn các menu (Ctrl+Shift+F)" [ref=e268] [cursor=pointer]
+    - generic:
+      - generic:
+        - button "Hiển thị bảng điều khiển bên":
+          - generic [ref=e273] [cursor=pointer]
+    - generic [ref=e279]:
+      - generic "Hộp tên (⌘ + J)" [ref=e280]:
+        - textbox [ref=e281]: A1
+        - button "Nút trình đơn hộp tên. Hãy chọn một trong các mục trong trình đơn để chuyển đến dải ô được đặt tên tương ứng." [ref=e283] [cursor=pointer]
+      - textbox [ref=e299]
+  - navigation "Thanh công cụ chứa thẻ trang tính" [ref=e335]:
+    - toolbar [ref=e336]:
+      - button "Thêm trang tính" [ref=e337] [cursor=pointer]
+      - button "Tất cả trang tính" [ref=e342] [cursor=pointer]
+    - toolbar [ref=e349]:
+      - button "Read me" [ref=e350]
+      - button "Profile" [ref=e358] [cursor=pointer]
+      - button "Dashboard" [ref=e366] [cursor=pointer]
+      - button "Daily Report" [ref=e374] [cursor=pointer]
+      - button "Topic Tracker" [ref=e382] [cursor=pointer]
+      - button "DoD Checklist" [ref=e390] [cursor=pointer]
+    - toolbar [ref=e398]
+  - generic [ref=e399]:
+    - textbox [active]
+  - alert
+  - link "Bật chế độ hỗ trợ trình đọc màn hình" [ref=e400] [cursor=pointer]:
+    - /url: "#"
+  - textbox [ref=e401]
+  - region [ref=e402]: Để bật chế độ hỗ trợ đọc màn hình, nhấn ⌘+Tùy chọn+Z Để tìm hiểu thêm về các phím tắt, nhấn ⌘dấu gạch chéo
+  - generic [ref=e403]: Thông báo bị ẩn
+  - region

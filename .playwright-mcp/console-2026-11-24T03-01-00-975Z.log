@@ -1,0 +1,15 @@
+[     577ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:1
+[    1799ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[    1799ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[    2173ms] [ERROR] Failed to load resource: the server responded with a status of 502 () @ https://csp.withgoogle.com/csp/proto/26981ed0d57bbad37e728ff58134270c:1
+[    2229ms] [WARNING] An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing. @ https://docs.google.com/drivesharing/clientmodel?id=1yBBGGxgEVShSh7FC27gnWxj8MQS6rp0Qzzh4LPpUrHQ&foreignService=ritz&authuser=0&origin=https%3A%2F%2Fdocs.google.com:1
+[    2696ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:1
+[    2718ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:1
+[    2721ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:1
+[    2723ms] [ERROR] Failed to load resource: net::ERR_FAILED @ chrome-extension://invalid/:1
+[   22019ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[   22019ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[   22019ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[   22019ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[   22019ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513
+[   36337ms] [ERROR] Permissions policy violation: unload is not allowed in this document. @ https://docs.google.com/_/spreadsheets/_/js/k=spreadsheets.waffle_js_prod_integrated.vi.O1cGi6b5ULU.es5.O/am=AAAAAAwADA/d=0/wt=0/rs=AB9W7jubRmoZlp8q-LxvsIIHoaQYHecjpA/m=core:513

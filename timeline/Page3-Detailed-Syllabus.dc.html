@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AiMentor Master Timeline · Page 3 · Detailed syllabus</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1d4ed8}a:hover{color:#1e3a8a}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.scrollx{overflow-x:auto}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #14171c; background: #ffffff; max-width: 1360px; margin: 0 auto; padding: 40px 40px 64px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; font-weight: 600; color: #4b5563; border-bottom: 1px solid #d1d5db; padding-bottom: 10px"><span>AiMentor · Master timeline</span><span>Page 3 of 4 · Detailed syllabus</span></div>
+
+<!-- 3. DETAILED SYLLABUS -->
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: baseline">
+    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px">3 · Detailed syllabus</h2>
+    <div style="display: flex; gap: 14px; font-size: 13px; color: #374151; flex-wrap: wrap">
+      <span><b style="color: #ffffff; background: #1f5f3a; padding: 1px 6px; border-radius: 3px">H</b> hands-on: build and configure it</span>
+      <span><b style="color: #ffffff; background: #6b7280; padding: 1px 6px; border-radius: 3px">A</b> awareness: explain and diagram it</span>
+    </div>
+  </div>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap" role="tablist">
+    <sc-for list="{{weekTabs}}" as="w" hint-placeholder-count="3">
+      <button onClick="{{w.pick}}" style="min-height: 44px; padding: 8px 18px; border-radius: 6px; border: 2px solid #14171c; background: {{w.bg}}; color: {{w.fg}}; font-weight: 600; font-size: 15px">{{w.label}}</button>
+    </sc-for>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px">
+    <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="5">
+      <article style="border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column">
+        <div style="background: {{d.color}}; color: #ffffff; padding: 10px 14px"><div style="font-size: 12px; font-weight: 600">D{{d.n}} · {{d.date}} · {{d.mod}}</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; line-height: 1.2">{{d.title}}</div></div>
+        <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+          <sc-for list="{{d.topics}}" as="t" hint-placeholder-count="3">
+            <div style="display: flex; gap: 8px; font-size: 14px; line-height: 1.35"><b style="flex: none; color: #ffffff; background: {{t.bg}}; font-size: 11px; padding: 1px 6px; border-radius: 3px; height: 18px">{{t.l}}</b><span>{{t.x}}</span></div>
+          </sc-for>
+          <div style="margin-top: auto; border-top: 1px dashed #d1d5db; padding-top: 8px; font-size: 13px; color: #374151"><b>Lab:</b> {{d.lab}}</div>
+          <div style="font-size: 13px; color: {{d.loadColor}}"><b>Hands-on load:</b> {{d.load}}</div>
+          <div style="font-size: 13px; font-weight: 700; color: {{d.checkColor}}">{{d.check}}</div>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { week: 1 }; }
+  renderVals() {
+
+const C = { M0:'#4b5563', M1:'#1d4ed8', M2:'#0f766e', M3:'#c2410c', M4:'#6d28d9', M5:'#b42318', M6:'#15803d' };
+const dates = ['30 Nov','1 Dec','2 Dec','3 Dec','4 Dec','7 Dec','8 Dec','9 Dec','10 Dec','11 Dec','14 Dec','15 Dec','16 Dec','17 Dec','18 Dec'];
+
+const DAYS = [
+  ['M0','Onboarding & tooling',[['Programme, Git/GitHub flow','H'],['GitHub Copilot setup','H'],['Jira & Confluence basics','H'],['How a cloud backend fits together','A']],'Repo from template, first PR, Jira ticket','Day quiz'],
+  ['M0','Go essentials + lint/test',[['Go syntax, structs, interfaces, errors, context','H'],['go build, go test, golangci-lint','H']],'Order domain types + table-driven tests','CP0 · Onboarding sign-off'],
+  ['M1','OpenAPI 3.0 & JSON Schema',[['REST & HTTP status codes','H'],['OpenAPI 3.0 paths, components, $ref','H'],['JSON Schema for request, response, error','H']],'openapi.yaml covering 100% of Order Service endpoints','Contract review'],
+  ['M1','oapi-codegen v2 & Gin middleware',[['oapi-codegen v2: strict server, Gin, client, types','H'],['go generate in CI, zero manual edits','H'],['Standard Gin middleware: request/trace ID, logging, recovery','H'],['Consistent error handling (RFC 7807)','H']],'Generated code untouched, middleware chain, one error format','Day quiz'],
+  ['M1','Handlers, service layer, Copilot',[['Handlers → service → repository','H'],['GitHub Copilot for code, tests, refactors','H'],['Explain every Copilot line you commit','H']],'Working API; go lint, build, test green; coverage meets team threshold','CP1 · Module 1 exam'],
+  ['M2','AWS basics, SDK for Go, S3',[['Regions, IAM users vs roles, CLI profiles','H'],['AWS SDK for Go v2: config, credential chain','H'],['S3 put/get, presigned URLs','H']],'Invoice upload to S3 (LocalStack, then sandbox)','Day quiz'],
+  ['M2','DynamoDB & RDS',[['DynamoDB keys, GSIs, conditional writes','H'],['RDS Postgres through the SDK and pgx, migrations','H'],['SQL vs NoSQL choice','A']],'Orders in DynamoDB, customers in RDS, repository interfaces','Day quiz'],
+  ['M2','KMS encryption of PII',[['KMS keys, envelope encryption, encryption context','H'],['Encrypt PII before persist, decrypt on read','H'],['No plaintext PII in DB or logs','H']],'Email and phone encrypted; KMS mocked in tests','CP2 · Module 2 exam'],
+  ['M3','SNS, SQS, EventBridge',[['Events vs commands','A'],['Publish via SNS, fan out to SQS, consume','H'],['EventBridge bus, rules, event schema','H'],['EventBridge Scheduler','H']],'OrderPlaced published and consumed; scheduled cancel job','Day quiz'],
+  ['M3','Idempotency & DLQ',[['At-least-once delivery, idempotency keys','H'],['Idempotent SQS and EventBridge consumers','H'],['SQS DLQ, maxReceiveCount, redrive','H'],['CloudWatch alarm on DLQ depth','H']],'Duplicate-message test; every queue has a DLQ and an alarm','CP3 · Module 3 exam'],
+  ['M4','IAM, secrets, audit & VPC',[['Least-privilege IAM per service','H'],['Secrets Manager for credentials','H'],['Parameter Store for config','H'],['AppConfig for feature flags','H'],['CloudTrail auditing','H'],['VPC, subnets, security groups (private subnets)','H']],'Secret scan clean; IAM policy with no * on data stores; private-subnet VPC','Day quiz'],
+  ['M4','Private network, Kong & Cognito',[['PrivateLink / VPC endpoints','H'],['Route 53 records','H'],['Megaport connectivity','H'],['Kong routing, authentication, rate limiting','H'],['Cognito user pool and JWT','H'],['Apigee Edge → Kong traffic migration','H']],'Service private behind Kong; JWT enforced; 429 on limit; Apigee routes migrated','CP4 · Module 4 exam'],
+  ['M5','Docker, ECS, Lambda, CloudFormation',[['Multi-stage, non-root Docker image','H'],['Image scan: zero critical/high','H'],['Run on AWS ECS (Fargate)','H'],['Run on AWS Lambda','H'],['CloudFormation stacks, parameters, drift detection','H']],'Clean image scan; 100% of infra in CloudFormation, zero drift','Day quiz'],
+  ['M5','GitHub Actions & Buildkite',[['GitHub flow and branch protection','H'],['GitHub Actions: lint → build → test → scan → push','H'],['Buildkite deploy pipeline with manual approval','H'],['Automated deploy to ECS/Lambda','H']],'Green CI on every PR; pipeline-driven deploy to sandbox','CP5 · Module 5 exam'],
+  ['M6','Observability, ops & demo',[['Datadog APM, Logs, Metrics','H'],['Datadog RUM','H'],['Trace/correlation ID end to end (Datadog + CloudWatch)','H'],['CloudWatch dashboards and alarms','H'],['PagerDuty alerting','H'],['Runbooks in Confluence, Atlassian Rovo, Jira tracking','H']],'Dashboard + alert + runbook; capstone demo','CP6 · Module 6 exam + final DoD']
+];
+
+    const DB = { H:'#1f5f3a', G:'#8a5a00', A:'#6b7280' };
+    const allDays = DAYS.map((d, i) => {
+      const nH = d[2].filter(t => t[1] === 'H').length;
+      return { n: i + 1, date: dates[i], mod: d[0] === 'M0' ? 'Start' : d[0], color: C[d[0]], title: d[1], topics: d[2].map(t => ({ x: t[0], l: t[1], bg: DB[t[1]] })), lab: d[3], check: d[4], checkColor: d[4].startsWith('CP') ? C[d[0]] : '#4b5563', load: nH + (nH === 1 ? ' topic' : ' topics'), loadColor: nH >= 6 ? '#b45309' : '#374151' };
+    });
+    const tab = (label, on, pick) => ({ label, pick, bg: on ? '#14171c' : '#ffffff', fg: on ? '#ffffff' : '#14171c' });
+    return {
+      weekTabs: [1,2,3].map(w => tab('Week ' + w, this.state.week === w, () => this.setState({ week: w }))),
+      weekDays: allDays.slice((this.state.week - 1) * 5, this.state.week * 5)
+    };
+  }
+}
+</script>
+</body>
+</html>

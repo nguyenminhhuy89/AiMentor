@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AiMentor Master Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14171c;--sub:#4b5563;--body:#374151;--line:#d1d5db;--soft:#f3f4f6;--bg:#ffffff;
+--m0:#4b5563;--m1:#1d4ed8;--m2:#0f766e;--m3:#c2410c;--m4:#6d28d9;--m5:#b42318;--m6:#15803d;
+--H:#1f5f3a;--G:#8a5a00;--A:#6b7280;--disp:'Space Grotesk',system-ui,sans-serif}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif}
+.page{max-width:1360px;margin:0 auto;padding:48px max(16px,40px) 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--disp);margin:0}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.02}
+h2{font-size:30px}
+p{margin:0}
+.sub{color:var(--sub);font-size:14px}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--m1);outline-offset:2px}
+.scrollx{overflow-x:auto}
+.head{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:24px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;flex:1 1 520px}
+.kpi{border-top:4px solid var(--ink);padding-top:8px}.kpi div:first-child{font-size:13px;color:var(--sub)}.kpi div:last-child{font-family:var(--disp);font-size:24px;font-weight:700}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:baseline}
+section{display:flex;flex-direction:column;gap:16px}
+.gantt{min-width:1080px;display:grid;grid-template-columns:230px repeat(15,minmax(0,1fr));column-gap:4px;row-gap:8px;align-items:center}
+.wk{background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:6px 10px;border-radius:4px}
+.dayh{text-align:center;font-size:12px;color:var(--sub);line-height:1.25}.dayh b{color:var(--ink);font-size:13px}
+.glabel{grid-column:1;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.sw{width:12px;height:12px;border-radius:3px;flex:none}
+.bar{color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp{text-align:center;font-size:12px;font-weight:700;line-height:1.2}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.card ul{margin:0;padding-left:18px;font-size:14px;line-height:1.45}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tab{min-height:44px;padding:8px 18px;border-radius:6px;border:2px solid var(--ink);background:#fff;color:var(--ink);font-weight:600;font-size:15px}
+.tab[aria-pressed=true]{background:var(--ink);color:#fff}
+.risk{border-color:var(--m3);color:var(--m3)}.risk[aria-pressed=true]{background:var(--m3);color:#fff}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.day{border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.dayhd{color:#fff;padding:10px 14px}.dayhd small{display:block;font-size:12px;font-weight:600}.dayhd b{font-family:var(--disp);font-size:18px;line-height:1.2}
+.daybd{padding:12px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.topic{display:flex;gap:8px;font-size:14px;line-height:1.35}
+.dep{flex:none;color:#fff;font-size:11px;font-weight:700;padding:1px 6px;border-radius:3px;height:18px}
+.lab{margin-top:auto;border-top:1px dashed var(--line);padding-top:8px;font-size:13px;color:var(--body)}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--body);flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--soft);border-radius:8px;padding:14px 16px}.stat div:first-child{font-size:13px;color:var(--sub)}.stat div:last-child{font-family:var(--disp);font-size:30px;font-weight:700}
+table{width:100%;min-width:1080px;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--sub);font-size:12px;padding:10px 6px;border-bottom:2px solid var(--ink)}
+td{padding:8px 6px;border-bottom:1px solid #e5e7eb}
+.pill{display:inline-block;min-width:74px;padding:5px 6px;border-radius:5px;font-size:12px;font-weight:700;line-height:1.2;text-align:center;border:1px solid}
+.pill span{font-weight:500}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.cad{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cad div{background:var(--soft);border-radius:8px;padding:18px}.cad h3{font-size:17px;margin-bottom:6px}.cad p{font-size:14px;color:var(--body)}
+@media(max-width:700px){.kpis,.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="head">
+  <div style="display:flex;flex-direction:column;gap:8px;flex:1 1 520px">
+    <p class="sub" style="font-weight:600">AiMentor · Cloud-native Go bootcamp for freshers</p>
+    <h1>Master timeline</h1>
+    <p style="font-size:17px;color:var(--body);max-width:640px">15 working days, 6 modules, 7 checkpoints. Every trainee builds the same capstone, the Order Service, and syncs up at each checkpoint.</p>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div>Start</div><div>Mon 30 Nov</div></div>
+    <div class="kpi"><div>Finish</div><div>Fri 18 Dec</div></div>
+    <div class="kpi"><div>Checkpoints</div><div>7</div></div>
+    <div class="kpi"><div>Pass mark</div><div>70 / 100</div></div>
+  </div>
+</header>
+
+<section>
+  <div class="sechead"><h2>1 · Master timeline</h2><p class="sub">Bars = module teaching window · ◆ = checkpoint · Module 6 runs as a thread from Day 2</p></div>
+  <div class="scrollx"><div class="gantt" id="gantt"></div></div>
+</section>
+
+<section>
+  <h2>2 · Checkpoints and what “done” means</h2>
+  <div class="cards" id="cps"></div>
+</section>
+
+<section>
+  <div class="sechead"><h2>3 · Detailed syllabus</h2>
+    <div class="legend">
+      <span><b class="dep" style="background:var(--H)">H</b> hands-on, must build</span>
+      <span><b class="dep" style="background:var(--G)">G</b> guided from a template</span>
+      <span><b class="dep" style="background:var(--A)">A</b> awareness, explain and diagram</span>
+    </div>
+  </div>
+  <div class="tabs" id="weekTabs"></div>
+  <div class="days" id="days"></div>
+</section>
+
+<section>
+  <div class="sechead" style="align-items:flex-end">
+    <div style="display:flex;flex-direction:column;gap:4px"><h2>4 · Member progress — Topic Tracker</h2><p class="sub" id="pub">Each member keeps a daily report sheet (Profile, Topic Tracker, DoD Checklist). Published from the AiMentor portal by the mentor-lead team. No members recorded yet.</p></div>
+    <button class="tab risk" id="riskBtn" aria-pressed="false">Behind / at-risk only</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div>Members reporting</div><div id="kMembers"></div></div>
+    <div class="stat"><div>Avg topics done</div><div id="kAvg"></div></div>
+    <div class="stat"><div>Behind schedule</div><div id="kBehind" style="color:var(--m5)"></div></div>
+    <div class="stat"><div>At risk</div><div id="kRisk" style="color:var(--m3)"></div></div>
+  </div>
+  <div class="scrollx"><table><thead><tr>
+    <th>Member</th><th style="min-width:230px">Topic progress</th><th style="min-width:200px">Module breakdown (M0–M6)</th>
+    <th class="num">Due / Behind</th><th class="num">DoD</th><th>Status</th><th>Flags</th>
+  </tr></thead><tbody id="tbody"></tbody></table></div>
+  <div class="legend">
+    <span><b class="dep" style="background:#1d4ed8">■</b> Done (with evidence)</span>
+    <span><b class="dep" style="background:#f59e0b">■</b> Done, no evidence link</span>
+    <span><b class="dep" style="background:#fbbf24">■</b> In progress</span>
+    <span><b class="dep" style="background:#e5e7eb;color:#6b7280">■</b> Not started</span>
+    <span><b class="pill" style="background:#fff;color:#1d4ed8;border-color:#1d4ed8;min-width:0">On track</b> on pace, no flags</span>
+    <span><b class="pill" style="background:#fff7ed;color:#9a3412;border-color:#f59e0b;min-width:0">Watch</b> 3–5 due topics behind</span>
+    <span><b class="pill" style="background:#c2410c;color:#fff;border-color:#c2410c;min-width:0">At risk</b> ≥6 behind, or a MUST item not met</span>
+    <span><b class="pill" style="background:#f3f4f6;color:#6b7280;border-color:#d1d5db;min-width:0">Not started</b> no report yet</span>
+  </div>
+</section>
+
+<section class="cad">
+  <div><h3>Daily · 09:00 stand-up</h3><p>mentor-lead posts the day plan; each member gives yesterday / today / blocker on the Jira board.</p></div>
+  <div><h3>Checkpoint day · 16:30 exam</h3><p>Exam uploaded to Drive by 17:00; exam-grader scores it overnight; status lands here next morning.</p></div>
+  <div><h3>Friday · 16:00 cohort sync-up</h3><p>Walk this table: who's behind on topics, Done entries missing evidence, DoD gaps — pair at-risk members, confirm next week's plan.</p></div>
+</section>
+
+</div>
+<script>
+const C={M0:'#4b5563',M1:'#1d4ed8',M2:'#0f766e',M3:'#c2410c',M4:'#6d28d9',M5:'#b42318',M6:'#15803d'};
+const DB={H:'#1f5f3a',G:'#8a5a00',A:'#6b7280'};
+const dates=['30 Nov','1 Dec','2 Dec','3 Dec','4 Dec','7 Dec','8 Dec','9 Dec','10 Dec','11 Dec','14 Dec','15 Dec','16 Dec','17 Dec','18 Dec'];
+// Full-granularity syllabus: one entry per topic as it appears on each trainee's Topic Tracker sheet
+// (60 topics total — matches daily-report/build.py's DAYS and the real Drive report). Section 3 and the
+// topic-tracking flattening in section 4 both read this same array, so they can never drift apart.
+const DAYS=[
+['M0','Onboarding & tooling',[['Programme, Git/GitHub flow','H'],['GitHub Copilot setup','H'],['Jira & Confluence basics','H'],['How a cloud backend fits together','A']],'Repo from template, first PR, Jira ticket','Day quiz'],
+['M0','Go essentials + lint/test',[['Go syntax, structs, interfaces, errors, context','H'],['go build, go test, golangci-lint','H']],'Order domain types + table-driven tests','CP0 · Onboarding sign-off'],
+['M1','OpenAPI 3.0 & JSON Schema',[['REST & HTTP status codes','H'],['OpenAPI 3.0 paths, components, $ref','H'],['JSON Schema for request, response, error','H']],'openapi.yaml covering 100% of Order Service endpoints','Contract review'],
+['M1','oapi-codegen v2 & Gin middleware',[['oapi-codegen v2: strict server, Gin, client, types','H'],['go generate in CI, zero manual edits','H'],['Standard Gin middleware: request/trace ID, logging, recovery','H'],['Consistent error handling (RFC 7807)','H']],'Generated code untouched, middleware chain, one error format','Day quiz'],
+['M1','Handlers, service layer, Copilot',[['Handlers → service → repository','H'],['GitHub Copilot for code, tests, refactors','H'],['Explain every Copilot line you commit','H']],'Working API; go lint, build, test green; coverage meets team threshold','CP1 · Module 1 exam'],
+['M2','AWS basics, SDK for Go, S3',[['Regions, IAM users vs roles, CLI profiles','H'],['AWS SDK for Go v2: config, credential chain','H'],['S3 put/get, presigned URLs','H']],'Invoice upload to S3 (LocalStack, then sandbox)','Day quiz'],
+['M2','DynamoDB & RDS',[['DynamoDB keys, GSIs, conditional writes','H'],['RDS Postgres through the SDK and pgx, migrations','H'],['SQL vs NoSQL choice','A']],'Orders in DynamoDB, customers in RDS, repository interfaces','Day quiz'],
+['M2','KMS encryption of PII',[['KMS keys, envelope encryption, encryption context','H'],['Encrypt PII before persist, decrypt on read','H'],['No plaintext PII in DB or logs','H']],'Email and phone encrypted; KMS mocked in tests','CP2 · Module 2 exam'],
+['M3','SNS, SQS, EventBridge',[['Events vs commands','A'],['Publish via SNS, fan out to SQS, consume','H'],['EventBridge bus, rules, event schema','H'],['EventBridge Scheduler','H']],'OrderPlaced published and consumed; scheduled cancel job','Day quiz'],
+['M3','Idempotency & DLQ',[['At-least-once delivery, idempotency keys','H'],['Idempotent SQS and EventBridge consumers','H'],['SQS DLQ, maxReceiveCount, redrive','H'],['CloudWatch alarm on DLQ depth','H']],'Duplicate-message test; every queue has a DLQ and an alarm','CP3 · Module 3 exam'],
+['M4','IAM, secrets, audit & VPC',[['Least-privilege IAM per service','H'],['Secrets Manager for credentials','H'],['Parameter Store for config','H'],['AppConfig for feature flags','H'],['CloudTrail auditing','H'],['VPC, subnets, security groups (private subnets)','H']],'Secret scan clean; IAM policy with no * on data stores; private-subnet VPC','Day quiz'],
+['M4','Private network, Kong & Cognito',[['PrivateLink / VPC endpoints','H'],['Route 53 records','H'],['Megaport connectivity','A'],['Kong routing, authentication, rate limiting','H'],['Cognito user pool and JWT','H'],['Apigee Edge → Kong traffic migration','A']],'Service private behind Kong; JWT enforced; 429 on limit; Apigee routes migrated','CP4 · Module 4 exam'],
+['M5','Docker, ECS, Lambda, CloudFormation',[['Multi-stage, non-root Docker image','H'],['Image scan: zero critical/high','H'],['Run on AWS ECS (Fargate)','G'],['Run on AWS Lambda','G'],['CloudFormation stacks, parameters, drift detection','H']],'Clean image scan; 100% of infra in CloudFormation, zero drift','Day quiz'],
+['M5','GitHub Actions & Buildkite',[['GitHub flow and branch protection','H'],['GitHub Actions: lint → build → test → scan → push','H'],['Buildkite deploy pipeline with manual approval','G'],['Automated deploy to ECS/Lambda','G']],'Green CI on every PR; pipeline-driven deploy to sandbox','CP5 · Module 5 exam'],
+['M6','Observability, ops & demo',[['Datadog APM, Logs, Metrics','H'],['Datadog RUM','A'],['Trace/correlation ID end to end (Datadog + CloudWatch)','H'],['CloudWatch dashboards and alarms','G'],['PagerDuty alerting','G'],['Runbooks in Confluence, Atlassian Rovo, Jira tracking','G']],'Dashboard + alert + runbook; capstone demo','CP6 · Module 6 exam + final DoD']];
+const GANTT=[
+['Onboarding & Go',C.M0,'2 / span 2','Git, Copilot, Go, Jira',1],
+['M1 Contract & Core API',C.M1,'4 / span 3','OpenAPI → oapi-codegen v2 → Gin',1],
+['M2 Data & Encryption',C.M2,'7 / span 3','SDK, S3, DynamoDB, RDS, KMS',1],
+['M3 Async & Event-Driven',C.M3,'10 / span 2','SNS, SQS, DLQ, EventBridge',1],
+['M4 Gateway, Network & Security',C.M4,'12 / span 2','IAM, secrets, VPC, Kong, Cognito',1],
+['M5 Runtime, IaC & CI/CD',C.M5,'14 / span 2','Docker, ECS, Lambda, CFN, CI/CD',1],
+['M6 thread: lint · build · test',C.M6,'3 / span 13','golangci-lint, go test, coverage, Jira, Confluence log — daily',.55],
+['M6 Observability & Ops',C.M6,'16 / span 1','Datadog',1],
+['Capstone: Order Service','#14171c','2 / span 15','One repo grows every day → demo on D15',1]];
+const CPS=[
+['CP0','Onboarded',2,'M0','mentor sign-off',['Repo, first PR, Jira and Confluence ready','Go tests run, lint passes locally']],
+['CP1','Contract & Core API',5,'M1','Module 1 exam',['100% of APIs in OpenAPI 3.0 + JSON Schema','oapi-codegen v2 output, zero manual edits','Gin middleware + RFC 7807 errors']],
+['CP2','Data & Encryption',8,'M2','Module 2 exam',['PII encrypted with AWS KMS','DynamoDB, RDS, S3 behind interfaces','No keys in code']],
+['CP3','Async & Events',10,'M3','Module 3 exam',['Consumers strictly idempotent','Every queue has a DLQ','DLQ alarm active']],
+['CP4','Gateway & Security',12,'M4','Module 4 exam',['Zero hardcoded secrets, right store per scope','Least-privilege IAM, private subnets','Kong auth + rate limit, CloudTrail on']],
+['CP5','Runtime & Delivery',14,'M5','Module 5 exam',['100% CloudFormation, zero drift','Non-root image, 0 critical/high','Automated GitHub Actions + Buildkite']],
+['CP6','Ops & final DoD',15,'M6','Module 6 exam + demo',['lint/build/test 100% in CI','Trace ID end to end in Datadog','Dashboards, PagerDuty, runbooks, Jira']]
+].map(([id,name,day,mod,how,dod])=>({id,name,day,how,dod,color:C[mod],date:dates[day-1]}));
+// MEMBERS:BEGIN — generated by the dashboard-publish skill from the AiMentor portal's `progress` collection
+// (Topic Tracker + DoD Checklist from each trainee's daily report sheet); do not hand-edit.
+const PUBLISHED="2026-11-24 11:14";
+// row: [TraineeID, name, team, url, topicStatus (60 chars, D/I/N, same order as DAYS flattened),
+//       doneWithProof, due, behind, dodMet, dodTotal, status, flags]
+const T=[
+["HUYNM27","Nguyen Minh Huy","","https://docs.google.com/spreadsheets/d/1rCl4oa8Y_yM-ERe5bFeGvXKCx2aFAfBe_JUyeUst4FQ/edit",
+ "DDDDDDDDDDIIIIIINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+ 0,0,0,7,30,"On track",["10 topic(s) marked Done with no evidence link","10 topic(s) marked Done before their day","Profile missing: Squad, Mentor, Repo / capstone link"]]
+];
+// MEMBERS:END
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S={week:1,riskOnly:false};
+// Flatten DAYS into one row per syllabus topic, in the same order dashboard-publish uses for topicStatus.
+const TOPICS=DAYS.flatMap((d,i)=>d[2].map(([x,lvl])=>({day:i+1,mod:d[0],topic:x,depth:lvl})));
+
+// 1. Gantt
+$('gantt').innerHTML='<div></div>'+
+ [['2 / span 5','Week 1 · Foundations + Contract'],['7 / span 5','Week 2 · Data + Events'],['12 / span 5','Week 3 · Security, Delivery, Ops']].map(([c,t])=>`<div class="wk" style="grid-column:${c}">${t}</div>`).join('')+
+ '<div></div>'+dates.map((d,i)=>`<div class="dayh"><b>D${i+1}</b><br>${d}</div>`).join('')+
+ GANTT.map(([l,c,span,t,op])=>`<div class="glabel"><span class="sw" style="background:${c}"></span>${esc(l)}</div><div class="bar" style="grid-column:${span};background:${c};opacity:${op}" title="${esc(t)}">${esc(t)}</div>`).join('')+
+ '<div class="glabel" style="font-weight:700">Checkpoints</div>'+CPS.map(c=>`<div class="cp" style="grid-column:${c.day+1};color:${c.color}">◆<br>${c.id}</div>`).join('');
+
+// 2. Checkpoints
+$('cps').innerHTML=CPS.map(c=>`<div class="card" style="border-top:6px solid ${c.color}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--disp);font-size:20px">${c.id} · ${esc(c.name)}</b><span class="sub" style="white-space:nowrap">D${c.day} · ${c.date}</span></div><div style="font-size:13px;color:var(--body)"><b>Assessed by:</b> ${esc(c.how)}</div><ul>${c.dod.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
+
+function render(){
+ // 3. Syllabus
+ $('weekTabs').innerHTML=[1,2,3].map(w=>`<button class="tab" data-week="${w}" aria-pressed="${S.week===w}">Week ${w}</button>`).join('');
+ $('days').innerHTML=DAYS.slice((S.week-1)*5,S.week*5).map((d,j)=>{const i=(S.week-1)*5+j,isCp=d[4].startsWith('CP');
+  return `<article class="day"><div class="dayhd" style="background:${C[d[0]]}"><small>D${i+1} · ${dates[i]} · ${d[0]==='M0'?'Start':d[0]}</small><b>${esc(d[1])}</b></div><div class="daybd">${d[2].map(([x,l])=>`<div class="topic"><b class="dep" style="background:${DB[l]}">${l}</b><span>${esc(x)}</span></div>`).join('')}<div class="lab"><b>Lab:</b> ${esc(d[3])}</div><div style="font-size:13px;font-weight:700;color:${isCp?C[d[0]]:'#4b5563'}">${esc(d[4])}</div></div></article>`}).join('');
+
+ // 4. Member progress — Topic Tracker
+ $('riskBtn').setAttribute('aria-pressed',S.riskOnly);
+ const statusColor={'On track':['#fff','#1d4ed8','#1d4ed8'],'Watch':['#fff7ed','#9a3412','#f59e0b'],'At risk':['#c2410c','#fff','#c2410c'],'Not started':['#f3f4f6','#6b7280','#d1d5db']};
+ const MODS=['M0','M1','M2','M3','M4','M5','M6'];
+ const rows=T.map(([id,name,team,url,ts,doneWithProof,due,behind,dodMet,dodTotal,status,flags])=>{
+  const n=Math.min(ts.length,TOPICS.length);let done=0,inprog=0;
+  const perMod={};for(const m of MODS)perMod[m]={done:0,total:0};
+  for(let i=0;i<n;i++){const t=TOPICS[i],c=ts[i];perMod[t.mod].total++;
+   if(c==='D'){done++;perMod[t.mod].done++}else if(c==='I')inprog++}
+  const total=n,notstarted=total-done-inprog,doneNoProof=done-doneWithProof,pct=total?Math.round(done/total*100):0;
+  const st=(done+inprog===0)?'Not started':status;
+  return{id,name,team,url,done,inprog,notstarted,total,doneWithProof,doneNoProof,pct,due,behind,dodMet,dodTotal,status:st,flags:flags||[],perMod,isRisk:st==='At risk'||st==='Watch'||(due>0&&behind>0)}});
+ $('pub').textContent=PUBLISHED?'Published '+PUBLISHED+' from the AiMentor portal.':'Member results are published from the AiMentor portal by the mentor-lead team. No members recorded yet.';
+ $('kMembers').textContent=rows.length;
+ $('kAvg').textContent=rows.length?Math.round(rows.reduce((a,r)=>a+r.pct,0)/rows.length)+'%':'–';
+ $('kBehind').textContent=rows.filter(r=>r.due>0&&r.behind>0).length;
+ $('kRisk').textContent=rows.filter(r=>r.status==='At risk').length;
+ if(!rows.length){$('tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:#6b7280">No member data yet.</td></tr>';return}
+ const bar=r=>{const w=x=>r.total?(x/r.total*100):0;
+  return `<div style="display:flex;height:16px;border-radius:4px;overflow:hidden;border:1px solid var(--line)">`+
+   (r.doneWithProof?`<div style="width:${w(r.doneWithProof)}%;background:#1d4ed8" title="${r.doneWithProof} done, with evidence"></div>`:'')+
+   (r.doneNoProof?`<div style="width:${w(r.doneNoProof)}%;background:#f59e0b" title="${r.doneNoProof} done, no evidence link"></div>`:'')+
+   (r.inprog?`<div style="width:${w(r.inprog)}%;background:#fbbf24" title="${r.inprog} in progress"></div>`:'')+
+   (r.notstarted?`<div style="width:${w(r.notstarted)}%;background:#e5e7eb" title="${r.notstarted} not started"></div>`:'')+
+   `</div><div class="sub" style="font-size:12px;margin-top:3px">${r.done}/${r.total} done (${r.pct}%)${r.doneNoProof?' · <span style="color:#9a3412">'+r.doneNoProof+' without proof</span>':''}</div>`};
+ const modBar=r=>MODS.map(m=>{const p=r.perMod[m],pct=p.total?Math.round(p.done/p.total*100):0;
+  return `<div style="flex:${p.total||1};min-width:14px" title="${m}: ${p.done}/${p.total}"><div style="height:14px;border-radius:3px;background:${C[m]};opacity:${p.total?0.18+0.82*(pct/100):0.12}"></div><div style="font-size:10px;text-align:center;color:var(--sub)">${m.slice(1)}</div></div>`}).join('');
+ $('tbody').innerHTML=rows.filter(r=>!S.riskOnly||r.isRisk).map(r=>{const[bg,fg,bd]=statusColor[r.status]||statusColor['Not started'];
+  return `<tr><td style="white-space:nowrap">${r.url?`<a href="${esc(r.url)}" style="color:inherit;text-decoration:underline">${esc(r.name)}</a>`:`<b>${esc(r.name)}</b>`}<br><span class="sub" style="font-size:12px">${esc(r.id)}${r.team?' · '+esc(r.team):''}</span></td>`+
+   `<td>${bar(r)}</td>`+
+   `<td><div style="display:flex;gap:3px;align-items:end">${modBar(r)}</div></td>`+
+   `<td class="num">${r.due}<span class="sub"> / </span>${r.behind}</td>`+
+   `<td class="num">${r.dodMet} / ${r.dodTotal}</td>`+
+   `<td><span class="pill" style="background:${bg};color:${fg};border-color:${bd}">${esc(r.status)}</span></td>`+
+   `<td class="sm" style="font-size:12px;min-width:200px">${r.flags.map(f=>'<div>⚠ '+esc(f)+'</div>').join('')||'<span class="sub">—</span>'}</td></tr>`}).join('');
+}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.week)S.week=+b.dataset.week;else if(b.id==='riskBtn')S.riskOnly=!S.riskOnly;else return;render()});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AiMentor Master Timeline · Page 1 · Master timeline</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1d4ed8}a:hover{color:#1e3a8a}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.scrollx{overflow-x:auto}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #14171c; background: #ffffff; max-width: 1360px; margin: 0 auto; padding: 40px 40px 64px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; font-weight: 600; color: #4b5563; border-bottom: 1px solid #d1d5db; padding-bottom: 10px"><span>AiMentor · Master timeline</span><span>Page 1 of 4 · Master timeline</span></div>
+
+<!-- HEADER -->
+<header style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: flex-end; justify-content: space-between; border-bottom: 2px solid #14171c; padding-bottom: 24px">
+  <div style="display: flex; flex-direction: column; gap: 8px; flex: 1 1 520px">
+    <p style="margin: 0; font-size: 14px; font-weight: 600; color: #4b5563">AiMentor · Cloud-native Go bootcamp for freshers</p>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 52px; line-height: 1.02; font-weight: 700">Master timeline</h1>
+    <p style="margin: 0; font-size: 17px; color: #374151; max-width: 640px">15 working days, 6 modules, 7 checkpoints. Every trainee builds the same capstone, the Order Service, and syncs up at each checkpoint.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; flex: 1 1 520px">
+    <div style="border-top: 4px solid #14171c; padding-top: 8px"><div style="font-size: 13px; color: #4b5563">Start</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">Mon 30 Nov</div></div>
+    <div style="border-top: 4px solid #14171c; padding-top: 8px"><div style="font-size: 13px; color: #4b5563">Finish</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">Fri 18 Dec</div></div>
+    <div style="border-top: 4px solid #14171c; padding-top: 8px"><div style="font-size: 13px; color: #4b5563">Checkpoints</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">7</div></div>
+    <div style="border-top: 4px solid #14171c; padding-top: 8px"><div style="font-size: 13px; color: #4b5563">Pass mark</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">70 / 100</div></div>
+  </div>
+</header>
+
+<!-- 1. MASTER GANTT -->
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: baseline">
+    <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px">1 · Master timeline</h2>
+    <p style="margin: 0; font-size: 14px; color: #4b5563">Bars = module teaching window · ◆ = checkpoint · Module 6 (lint / build / test) runs as a thread from Day 2</p>
+  </div>
+  <div class="scrollx">
+    <div style="min-width: 1080px; display: grid; grid-template-columns: 230px repeat(15, minmax(0, 1fr)); column-gap: 4px; row-gap: 8px; align-items: center">
+      <div></div>
+      <div style="grid-column: 2 / span 5; background: #14171c; color: #ffffff; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 4px">Week 1 · Foundations + Contract</div>
+      <div style="grid-column: 7 / span 5; background: #14171c; color: #ffffff; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 4px">Week 2 · Data + Events</div>
+      <div style="grid-column: 12 / span 5; background: #14171c; color: #ffffff; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 4px">Week 3 · Security, Delivery, Ops</div>
+      <div></div>
+      <sc-for list="{{days}}" as="d" hint-placeholder-count="15">
+        <div style="text-align: center; font-size: 12px; color: #4b5563; line-height: 1.25"><b style="color: #14171c; font-size: 13px">D{{d.n}}</b><br>{{d.date}}</div>
+      </sc-for>
+      <sc-for list="{{gantt}}" as="g" hint-placeholder-count="8">
+        <div style="grid-column: 1; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: {{g.color}}; flex: none"></span>{{g.label}}</div>
+        <div style="grid-column: {{g.span}}; background: {{g.color}}; opacity: {{g.op}}; color: #ffffff; font-size: 12px; font-weight: 600; padding: 7px 10px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{g.text}}</div>
+      </sc-for>
+      <div style="grid-column: 1; font-size: 14px; font-weight: 700">Checkpoints</div>
+      <sc-for list="{{cpCells}}" as="c" hint-placeholder-count="15">
+        <div style="grid-column: {{c.col}}; text-align: center; font-size: 12px; font-weight: 700; color: {{c.color}}; line-height: 1.2">{{c.mark}}<br>{{c.id}}</div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+
+  renderVals() {
+
+const C = { M0:'#4b5563', M1:'#1d4ed8', M2:'#0f766e', M3:'#c2410c', M4:'#6d28d9', M5:'#b42318', M6:'#15803d' };
+const dates = ['30 Nov','1 Dec','2 Dec','3 Dec','4 Dec','7 Dec','8 Dec','9 Dec','10 Dec','11 Dec','14 Dec','15 Dec','16 Dec','17 Dec','18 Dec'];
+
+const cps = [
+  { id:'CP0', name:'Onboarded', day:2, mod:'M0', how:'mentor sign-off', dod:['Repo, first PR, Jira and Confluence ready','Go build, test and golangci-lint run locally'] },
+  { id:'CP1', name:'Contract & Core API', day:5, mod:'M1', how:'Module 1 exam', dod:['100% of APIs defined in OpenAPI 3.0 & JSON Schema','oapi-codegen v2 code with zero manual edits','Gin standardized middleware and error handling','go lint, build, test pass; coverage meets team threshold'] },
+  { id:'CP2', name:'Data & Encryption', day:8, mod:'M2', how:'Module 2 exam', dod:['AWS SDK for Go integrated with RDS, DynamoDB, S3','Sensitive data/PII encrypted and decrypted with AWS KMS','Zero hardcoded keys or secrets'] },
+  { id:'CP3', name:'Async & Event-Driven', day:10, mod:'M3', how:'Module 3 exam', dod:['Events published and consumed via EventBridge, SNS, SQS, Scheduler','SQS and EventBridge consumers strictly idempotent','Every queue has an SQS DLQ with active alerting'] },
+  { id:'CP4', name:'Gateway, Network & Security', day:12, mod:'M4', how:'Module 4 exam', dod:['Zero hardcoded secrets; Secrets Manager, Parameter Store, AppConfig used by scope','Least-privilege IAM enforced','Private subnets (VPC, Subnets, SGs) with PrivateLink / VPC Endpoints and Megaport','Kong enforces routing, authentication, rate limiting; Apigee Edge traffic migrated','Cognito and Route 53 secure access; CloudTrail auditing on'] },
+  { id:'CP5', name:'Runtime, IaC & CI/CD', day:14, mod:'M5', how:'Module 5 exam', dod:['100% of infrastructure in CloudFormation, zero drift','Multi-stage, non-root Docker on ECS/Lambda, zero critical/high vulnerabilities','Automated deployments via GitHub, GitHub Actions, Buildkite'] },
+  { id:'CP6', name:'Quality, Observability & Ops', day:15, mod:'M6', how:'Module 6 exam + demo', dod:['go lint, build, test 100% pass in CI','Trace/correlation IDs end to end across Datadog (APM, Logs, RUM, Metrics) and CloudWatch','Dashboards configured, PagerDuty alerts active','Runbooks in Confluence/Rovo, tasks tracked in Jira'] }
+].map(c => ({ ...c, color: C[c.mod], date: dates[c.day - 1] }));
+
+const gantt = [
+  { label:'Onboarding & Go', color:C.M0, span:'2 / span 2', text:'Git, Copilot, Go, Jira', op:1 },
+  { label:'M1 Contract & Core API', color:C.M1, span:'4 / span 3', text:'OpenAPI → oapi-codegen v2 → Gin', op:1 },
+  { label:'M2 Data & Encryption', color:C.M2, span:'7 / span 3', text:'SDK, S3, DynamoDB, RDS, KMS', op:1 },
+  { label:'M3 Async & Event-Driven', color:C.M3, span:'10 / span 2', text:'SNS, SQS, DLQ, EventBridge', op:1 },
+  { label:'M4 Gateway, Network & Security', color:C.M4, span:'12 / span 2', text:'IAM, secrets, VPC, Megaport, Kong, Cognito', op:1 },
+  { label:'M5 Runtime, IaC & CI/CD', color:C.M5, span:'14 / span 2', text:'Docker, ECS, Lambda, CFN, CI/CD', op:1 },
+  { label:'M6 thread: lint · build · test', color:C.M6, span:'3 / span 13', text:'go lint, build, test in CI, Jira, Confluence log — daily', op:0.55 },
+  { label:'M6 Observability & Ops', color:C.M6, span:'16 / span 1', text:'Datadog', op:1 },
+  { label:'Capstone: Order Service', color:'#14171c', span:'2 / span 15', text:'One repo grows every day → demo on D15', op:1 }
+];
+
+    const days = dates.map((d, i) => ({ n: i + 1, date: d }));
+    const cpCells = cps.map(c => ({ col: String(c.day + 1), id: c.id, mark: '◆', color: c.color }));
+    return { days, gantt, cpCells };
+  }
+}
+</script>
+</body>
+</html>

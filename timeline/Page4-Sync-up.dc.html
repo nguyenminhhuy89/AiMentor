@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AiMentor Master Timeline · Page 4 · Member sync-up</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1d4ed8}a:hover{color:#1e3a8a}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.scrollx{overflow-x:auto}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #14171c; background: #ffffff; max-width: 1360px; margin: 0 auto; padding: 40px 40px 64px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; font-weight: 600; color: #4b5563; border-bottom: 1px solid #d1d5db; padding-bottom: 10px"><span>AiMentor · Master timeline</span><span>Page 4 of 4 · Member sync-up</span></div>
+
+<!-- 4. MEMBER PROGRESS — TOPIC TRACKER -->
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-end">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px">4 · Member progress — Topic Tracker</h2>
+      <p style="margin: 0; font-size: 14px; color: #4b5563">Each member keeps a daily report sheet (Profile, Topic Tracker, DoD Checklist). Published {{publishedAt}} from the AiMentor portal by the mentor-lead team.</p>
+    </div>
+    <button onClick="{{toggleRisk}}" style="min-height: 44px; padding: 8px 16px; border-radius: 6px; border: 2px solid #c2410c; background: {{riskBg}}; color: {{riskFg}}; font-weight: 600; font-size: 14px">Behind / at-risk only</button>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+    <div style="background: #f3f4f6; border-radius: 8px; padding: 14px 16px"><div style="font-size: 13px; color: #4b5563">Members reporting</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">{{kMembers}}</div></div>
+    <div style="background: #f3f4f6; border-radius: 8px; padding: 14px 16px"><div style="font-size: 13px; color: #4b5563">Avg topics done</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">{{kAvg}}</div></div>
+    <div style="background: #f3f4f6; border-radius: 8px; padding: 14px 16px"><div style="font-size: 13px; color: #4b5563">Behind schedule</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #b42318">{{kBehind}}</div></div>
+    <div style="background: #f3f4f6; border-radius: 8px; padding: 14px 16px"><div style="font-size: 13px; color: #4b5563">At risk</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #c2410c">{{kRisk}}</div></div>
+  </div>
+
+  <div class="scrollx">
+    <table style="width: 100%; min-width: 1080px; border-collapse: collapse; font-size: 14px">
+      <thead>
+        <tr style="text-align: left; color: #4b5563; font-size: 12px">
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c">Member</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c; min-width: 230px">Topic progress</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c; min-width: 200px">Module breakdown (M0–M6)</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c; text-align: right">Due / Behind</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c; text-align: right">DoD</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c">Status</th>
+          <th style="padding: 10px 8px; border-bottom: 2px solid #14171c; min-width: 200px">Flags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-if value="{{hasRows}}" hint-placeholder-val="{{true}}">
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+            <tr style="border-bottom: 1px solid #e5e7eb">
+              <td style="padding: 10px 8px; white-space: nowrap">
+                <a href="{{r.url}}" style="color: inherit; text-decoration: underline"><b>{{r.name}}</b></a>
+                <br><span style="font-size: 12px; color: #4b5563">{{r.idTeam}}</span>
+              </td>
+              <td style="padding: 8px">
+                <div style="display: flex; height: 16px; border-radius: 4px; overflow: hidden; border: 1px solid #d1d5db">
+                  <sc-for list="{{r.segments}}" as="seg" hint-placeholder-count="2">
+                    <div style="width: {{seg.w}}%; background: {{seg.bg}}" title="{{seg.title}}"></div>
+                  </sc-for>
+                </div>
+                <div style="font-size: 12px; color: #4b5563; margin-top: 3px">{{r.pctLabel}}</div>
+              </td>
+              <td style="padding: 8px">
+                <div style="display: flex; gap: 3px; align-items: end">
+                  <sc-for list="{{r.modBars}}" as="m" hint-placeholder-count="7">
+                    <div style="flex: {{m.flex}}; min-width: 14px" title="{{m.title}}">
+                      <div style="height: 14px; border-radius: 3px; background: {{m.color}}; opacity: {{m.opacity}}"></div>
+                      <div style="font-size: 10px; text-align: center; color: #4b5563">{{m.label}}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </td>
+              <td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">{{r.due}} / {{r.behind}}</td>
+              <td style="padding: 10px 8px; text-align: right; font-variant-numeric: tabular-nums">{{r.dod}}</td>
+              <td style="padding: 10px 8px"><span style="display: inline-block; padding: 5px 10px; border-radius: 5px; background: {{r.statusBg}}; color: {{r.statusFg}}; border: 1px solid {{r.statusBd}}; font-size: 12px; font-weight: 700">{{r.status}}</span></td>
+              <td style="padding: 10px 8px; font-size: 12px; color: #374151">
+                <sc-for list="{{r.flags}}" as="f" hint-placeholder-count="1">
+                  <div>⚠ {{f}}</div>
+                </sc-for>
+              </td>
+            </tr>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{noRows}}" hint-placeholder-val="{{false}}">
+          <tr><td colspan="7" style="text-align: center; padding: 24px; color: #6b7280">No member data yet.</td></tr>
+        </sc-if>
+      </tbody>
+    </table>
+  </div>
+  <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #374151">
+    <span><b style="background: #1d4ed8; color: #ffffff; padding: 2px 8px; border-radius: 4px">■</b> Done (with evidence)</span>
+    <span><b style="background: #f59e0b; color: #ffffff; padding: 2px 8px; border-radius: 4px">■</b> Done, no evidence link</span>
+    <span><b style="background: #fbbf24; color: #ffffff; padding: 2px 8px; border-radius: 4px">■</b> In progress</span>
+    <span><b style="background: #e5e7eb; color: #6b7280; padding: 2px 8px; border-radius: 4px">■</b> Not started</span>
+    <span><b style="background: #ffffff; color: #1d4ed8; border: 1px solid #1d4ed8; padding: 2px 8px; border-radius: 4px">On track</b> on pace, no flags</span>
+    <span><b style="background: #fff7ed; color: #9a3412; border: 1px solid #f59e0b; padding: 2px 8px; border-radius: 4px">Watch</b> 3–5 due topics behind</span>
+    <span><b style="background: #c2410c; color: #ffffff; padding: 2px 8px; border-radius: 4px">At risk</b> ≥6 behind, or a MUST item not met</span>
+    <span><b style="background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; padding: 2px 8px; border-radius: 4px">Not started</b> no report yet</span>
+  </div>
+</section>
+
+<!-- 5. SYNC-UP CADENCE -->
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+  <div style="background: #f3f4f6; border-radius: 8px; padding: 18px"><h3 style="margin: 0 0 6px; font-size: 17px">Daily · 09:00 stand-up</h3><p style="margin: 0; font-size: 14px; color: #374151">mentor-lead posts the day plan; each member gives yesterday / today / blocker on the Jira board.</p></div>
+  <div style="background: #f3f4f6; border-radius: 8px; padding: 18px"><h3 style="margin: 0 0 6px; font-size: 17px">Checkpoint day · 16:30 exam</h3><p style="margin: 0; font-size: 14px; color: #374151">Exam uploaded to Drive by 17:00; exam-grader scores it overnight; status lands here next morning.</p></div>
+  <div style="background: #f3f4f6; border-radius: 8px; padding: 18px"><h3 style="margin: 0 0 6px; font-size: 17px">Friday · 16:00 cohort sync-up</h3><p style="margin: 0; font-size: 14px; color: #374151">Walk this table: who's behind on topics, Done entries missing evidence, DoD gaps — pair at-risk members, confirm next week's plan.</p></div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { riskOnly: false }; }
+  renderVals() {
+
+// MEMBERS:BEGIN — generated by the dashboard-publish skill from the AiMentor portal's `progress` collection
+// (Topic Tracker + DoD Checklist from each trainee's daily report sheet); do not hand-edit.
+const PUBLISHED = '2026-11-24 11:14';
+// row: [TraineeID, name, team, url, topicStatus (60 chars, D/I/N, same order as MODCOUNTS flattened),
+//       doneWithProof, due, behind, dodMet, dodTotal, status, flags]
+const T = [
+  ['HUYNM27','Nguyen Minh Huy','','https://docs.google.com/spreadsheets/d/1rCl4oa8Y_yM-ERe5bFeGvXKCx2aFAfBe_JUyeUst4FQ/edit',
+   'DDDDDDDDDDIIIIIINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN',
+   0, 0, 0, 7, 30, 'On track',
+   ['10 topic(s) marked Done with no evidence link','10 topic(s) marked Done before their day','Profile missing: Squad, Mentor, Repo / capstone link']]
+];
+// MEMBERS:END
+
+// Syllabus topic counts per module (60 topics total across D1–D15, one row per Topic Tracker entry).
+const MODCOUNTS = [['M0',6],['M1',10],['M2',9],['M3',8],['M4',12],['M5',9],['M6',6]];
+const MODMAP = MODCOUNTS.flatMap(([m, n]) => Array(n).fill(m));
+const MODCOLOR = { M0:'#4b5563', M1:'#1d4ed8', M2:'#0f766e', M3:'#c2410c', M4:'#6d28d9', M5:'#b42318', M6:'#15803d' };
+const STATUS_COLOR = {
+  'On track':   { bg:'#ffffff', fg:'#1d4ed8', bd:'#1d4ed8' },
+  'Watch':      { bg:'#fff7ed', fg:'#9a3412', bd:'#f59e0b' },
+  'At risk':    { bg:'#c2410c', fg:'#ffffff', bd:'#c2410c' },
+  'Not started':{ bg:'#f3f4f6', fg:'#6b7280', bd:'#d1d5db' }
+};
+
+const n = MODMAP.length;
+const rows = T.map(([id, name, team, url, ts, doneWithProof, due, behind, dodMet, dodTotal, status, flags]) => {
+  let done = 0, inprog = 0;
+  const perMod = {}; for (const m of MODCOUNTS.map(x => x[0])) perMod[m] = { done: 0, total: 0 };
+  const len = Math.min(ts.length, n);
+  for (let i = 0; i < len; i++) {
+    const mod = MODMAP[i], c = ts[i]; perMod[mod].total++;
+    if (c === 'D') { done++; perMod[mod].done++; } else if (c === 'I') inprog++;
+  }
+  const total = len, notstarted = total - done - inprog, doneNoProof = done - doneWithProof;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const st = (done + inprog === 0) ? 'Not started' : status;
+  const sc = STATUS_COLOR[st] || STATUS_COLOR['Not started'];
+  const w = x => total ? (x / total * 100) : 0;
+  const segments = [];
+  if (doneWithProof) segments.push({ w: w(doneWithProof), bg:'#1d4ed8', title: doneWithProof + ' done, with evidence' });
+  if (doneNoProof) segments.push({ w: w(doneNoProof), bg:'#f59e0b', title: doneNoProof + ' done, no evidence link' });
+  if (inprog) segments.push({ w: w(inprog), bg:'#fbbf24', title: inprog + ' in progress' });
+  if (notstarted) segments.push({ w: w(notstarted), bg:'#e5e7eb', title: notstarted + ' not started' });
+  const modBars = MODCOUNTS.map(([m, mt]) => {
+    const p = perMod[m], mpct = p.total ? Math.round(p.done / p.total * 100) : 0;
+    return { label: m.slice(1), flex: p.total || 1, opacity: p.total ? (0.18 + 0.82 * (mpct / 100)) : 0.12, color: MODCOLOR[m], title: m + ': ' + p.done + '/' + p.total };
+  });
+  const isRisk = st === 'At risk' || st === 'Watch' || (due > 0 && behind > 0);
+  return {
+    id, name, team, url, idTeam: id + (team ? ' · ' + team : ''),
+    segments, pct, pctLabel: done + '/' + total + ' done (' + pct + '%)' + (doneNoProof ? ' · ' + doneNoProof + ' without proof' : ''),
+    modBars, dueNum: due, behindNum: behind, due: String(due), behind: String(behind), dod: dodMet + ' / ' + dodTotal,
+    status: st, statusBg: sc.bg, statusFg: sc.fg, statusBd: sc.bd, flags: flags || [], isRisk
+  };
+});
+const shown = this.state.riskOnly ? rows.filter(r => r.isRisk) : rows;
+
+return {
+  publishedAt: PUBLISHED,
+  hasRows: shown.length > 0,
+  noRows: shown.length === 0,
+  rows: shown,
+  toggleRisk: () => this.setState({ riskOnly: !this.state.riskOnly }),
+  riskBg: this.state.riskOnly ? '#c2410c' : '#ffffff', riskFg: this.state.riskOnly ? '#ffffff' : '#c2410c',
+  kMembers: String(rows.length),
+  kAvg: rows.length ? Math.round(rows.reduce((a, r) => a + r.pct, 0) / rows.length) + '%' : '–',
+  kBehind: String(rows.filter(r => r.dueNum > 0 && r.behindNum > 0).length),
+  kRisk: String(rows.filter(r => r.status === 'At risk').length)
+};
+  }
+}
+</script>
+</body>
+</html>

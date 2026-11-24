@@ -1,0 +1,130 @@
+- application [ref=e1]:
+  - iframe [aria-hidden] [ref=e2]
+  - iframe [aria-hidden] [ref=e3]
+  - banner [aria-hidden] [ref=e753]:
+    - generic [ref=e7]:
+      - link [ref=e754] [cursor=pointer]:
+        - /url: https://docs.google.com/spreadsheets/u/0/?authuser=0&usp=sheets_web
+      - generic [ref=e16]:
+        - generic [ref=e755]:
+          - generic [ref=e19]:
+            - generic: AiMentor Daily Progress Report - TEMPLATE
+            - textbox [ref=e756]: AiMentor Daily Progress Report - TEMPLATE
+          - generic [ref=e22]:
+            - checkbox [ref=e757] [cursor=pointer]
+            - button [ref=e758] [cursor=pointer]
+            - button [ref=e759]:
+              - generic [ref=e690] [cursor=pointer]
+        - generic [ref=e36]:
+          - button [ref=e760] [cursor=pointer]
+          - button [ref=e761] [cursor=pointer]
+          - button [ref=e762] [cursor=pointer]
+          - generic [ref=e51]:
+            - button [ref=e763] [cursor=pointer]: Chia sẻ
+            - button [ref=e764] [cursor=pointer]
+          - generic [ref=e59]:
+            - link [ref=e765] [cursor=pointer]:
+              - generic [ref=e63]: Nâng cấp
+            - tooltip [aria-hidden] [ref=e64]: Nâng cấp để dùng các tính năng nâng cao
+          - generic [ref=e67]:
+            - button [ref=e766] [cursor=pointer]
+            - tooltip [aria-hidden] [ref=e77]: Dùng thử Gemini
+          - button [ref=e767] [cursor=pointer]
+    - generic [ref=e82]:
+      - menubar [ref=e84]:
+        - menuitem [ref=e768] [cursor=pointer]: Tệp
+        - menuitem [ref=e769] [cursor=pointer]: Chỉnh sửa
+        - menuitem [ref=e770] [cursor=pointer]: Xem
+        - menuitem [ref=e771] [cursor=pointer]: Chèn
+        - menuitem [ref=e772] [cursor=pointer]: Định dạng
+        - menuitem [ref=e773] [cursor=pointer]: Dữ liệu
+        - menuitem [ref=e774] [cursor=pointer]: Công cụ
+        - menuitem [ref=e775] [cursor=pointer]: Tiện ích
+        - menuitem [ref=e776] [cursor=pointer]: Trợ giúp
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - button [ref=e777] [cursor=pointer]
+            - combobox [ref=e778]
+          - toolbar [ref=e779]:
+            - button [ref=e780] [cursor=pointer]
+            - button [ref=e781] [cursor=pointer]
+            - button [ref=e782] [cursor=pointer]
+            - button [ref=e783] [cursor=pointer]
+            - combobox [ref=e784] [cursor=pointer]:
+              - textbox [ref=e786]: 100%
+            - separator [disabled] [ref=e129]
+            - button [ref=e787] [cursor=pointer]:
+              - generic [ref=e131]: ₫
+            - button [ref=e788] [cursor=pointer]:
+              - generic [ref=e134]: "%"
+            - button [ref=e789] [cursor=pointer]
+            - button [ref=e790] [cursor=pointer]
+            - button [ref=e791] [cursor=pointer]:
+              - generic [ref=e147]: "123"
+            - separator [disabled] [ref=e150]
+            - listbox [ref=e792] [cursor=pointer]:
+              - option [selected] [ref=e793]: Arial
+            - separator [disabled] [ref=e158]
+            - button [ref=e794] [cursor=pointer]
+            - combobox [ref=e795] [cursor=pointer]:
+              - textbox [ref=e797]: "16"
+            - button [ref=e798] [cursor=pointer]
+            - separator [disabled] [ref=e174]
+            - button [pressed] [ref=e799] [cursor=pointer]
+            - button [ref=e800] [cursor=pointer]
+            - button [ref=e801] [cursor=pointer]
+            - button [ref=e802] [cursor=pointer]
+            - separator [disabled] [ref=e197]
+            - button [ref=e803] [cursor=pointer]
+            - button [ref=e804] [cursor=pointer]
+            - button [disabled] [ref=e805]
+            - button [disabled] [ref=e806]
+            - separator [disabled] [ref=e222]
+            - button [ref=e807] [cursor=pointer]
+            - button [ref=e808] [cursor=pointer]
+            - button [ref=e809] [cursor=pointer]
+            - button [ref=e810] [cursor=pointer]
+            - separator [disabled] [ref=e259]
+            - button [ref=e811] [cursor=pointer]
+        - toolbar [ref=e812]:
+          - button [ref=e813] [cursor=pointer]
+    - generic:
+      - button:
+        - generic [ref=e273] [cursor=pointer]
+    - generic [ref=e279]:
+      - generic [ref=e814]:
+        - textbox [ref=e281]: A1
+        - button [ref=e815] [cursor=pointer]
+      - textbox [ref=e299]
+  - navigation [ref=e816]:
+    - toolbar [ref=e336]:
+      - button [ref=e817] [cursor=pointer]
+      - button [ref=e818] [cursor=pointer]
+    - toolbar [ref=e349]:
+      - button [ref=e819] [cursor=pointer]:
+        - generic [ref=e649]: Read me
+      - button [ref=e820] [cursor=pointer]:
+        - generic [ref=e657]: Profile
+      - button [ref=e821]:
+        - generic [ref=e665]: Daily Report
+      - button [ref=e822] [cursor=pointer]:
+        - generic [ref=e673]: Topic Tracker
+      - button [ref=e823] [cursor=pointer]:
+        - generic [ref=e681]: DoD Checklist
+    - toolbar [ref=e398]
+  - link [aria-hidden] [ref=e824] [cursor=pointer]:
+    - /url: "#"
+    - text: Bật chế độ hỗ trợ trình đọc màn hình
+  - textbox [aria-hidden] [ref=e401]
+  - region [ref=e402]: Để bật chế độ hỗ trợ đọc màn hình, nhấn ⌘+Tùy chọn+Z Để tìm hiểu thêm về các phím tắt, nhấn ⌘dấu gạch chéo
+  - generic [aria-hidden] [ref=e403]: Thông báo bị ẩn
+  - iframe [aria-hidden] [ref=e825]
+  - alertdialog "Thông báo!" [active] [ref=e827]:
+    - generic [ref=e828]:
+      - heading "Thông báo!" [ref=e829]
+      - button "Đóng" [ref=e830] [cursor=pointer]
+    - generic [ref=e831]: Bạn có chắc chắn muốn xóa trang tính này không?
+    - generic [ref=e832]:
+      - button "Hủy" [ref=e833] [cursor=pointer]
+      - button "OK" [ref=e834] [cursor=pointer]

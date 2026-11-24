@@ -1,0 +1,121 @@
+# CP5 Runtime, IaC & CI/CD — topic|difficulty|question|correct|wrong1|wrong2|wrong3|explanation
+Docker|E|What is a Docker image?|A read-only template with the app and its dependencies used to start containers|A running process|A virtual machine disk only|A Git branch|Containers are running instances of images.
+Docker|E|Which file defines how an image is built?|Dockerfile|docker-compose.yml only|go.mod|Makefile|Build with docker build.
+Docker|E|What does a multi-stage build do?|Uses one stage to compile and a smaller final stage that copies only the binary|Builds images for multiple clouds|Runs tests in production|Creates multiple containers|Smaller, safer images.
+Docker|E|Why should containers run as a non-root user?|Limits damage if the container is compromised|It is faster|Root cannot run Go|AWS requires root|DoD: non-root images.
+Docker|E|Which instruction sets the user in a Dockerfile?|USER|RUN user|SETUSER|AS|e.g. USER 65532:65532 or USER nonroot.
+Docker|M|Which base image is a good minimal final stage for a static Go binary?|gcr.io/distroless/static (nonroot) or scratch|ubuntu:latest|golang:latest|node:20|Fewer packages = fewer vulnerabilities.
+Docker|M|How do you build a static Go binary for scratch/distroless?|CGO_ENABLED=0 go build -o app ./cmd/api|go run main.go|go build -race|go test -c|No libc dependency.
+Docker|M|Why copy go.mod and go.sum and run go mod download before copying source?|Layer caching: dependencies are reused when only source code changes|Docker requires that order|It reduces binary size|It disables CGO|Faster rebuilds.
+Docker|M|What does .dockerignore do?|Excludes files from the build context (e.g. .git, .env, local binaries)|Ignores Docker errors|Hides containers|Skips image scanning|Smaller context and no leaked secrets.
+Docker|M|Why avoid the :latest tag in deployments?|It is mutable, so you cannot know or roll back exactly what runs|It is slower|ECS rejects it|It is not free|Use immutable tags like the Git SHA.
+Docker|M|What does an image scanner like Trivy report?|Known vulnerabilities (CVEs) in OS packages and dependencies, plus misconfigurations|Unit test failures|Go lint warnings only|Network latency|DoD: 0 critical/high.
+Docker|M|A scan shows high CVEs from the ubuntu base. Fastest fix?|Switch the final stage to distroless/scratch and rebuild|Ignore them|Add more packages|Run as root|Most CVEs come from unused OS packages.
+Docker|H|Why should secrets never be passed via build ARG?|Build args can persist in image history/metadata|ARGs are slow|ARG is deprecated|ARGs are encrypted|Use runtime secrets instead.
+Docker|H|How do you make a container image immutable in ECR?|Enable tag immutability on the repository|Use latest tag|Delete old images|Disable scanning|Prevents tag overwrites.
+Docker|E|Which command lists running containers?|docker ps|docker images|docker logs|docker build|docker images lists images.
+Docker|M|What does EXPOSE 8080 do in a Dockerfile?|Documents the port; it does not publish it by itself|Opens the port to the internet|Sets the app port in Go|Creates a security group|Port mapping is done at run/task level.
+Docker|M|Where should the app listen inside the container?|0.0.0.0:<port> so traffic from outside the container reaches it|127.0.0.1 only|A Unix socket only|Port 22|Localhost binding is unreachable from ECS.
+Docker|H|What is a HEALTHCHECK or ECS health check for?|Detecting unhealthy containers so the orchestrator replaces them|Measuring code coverage|Rate limiting|Scanning images|Use a lightweight /healthz.
+Docker|E|Which registry does the bootcamp push images to?|Amazon ECR|Docker Hub public|GitHub Releases|S3|Private, IAM-controlled.
+Docker|H|Distroless has no shell. How do you debug a running container?|Use logs/traces, ECS Exec with a debug sidecar or a debug image variant — not a shell in prod images|Add bash to the prod image|Run as root|SSH into the container|Keep prod images minimal.
+Docker|M|What does "docker build -t order-service:${GIT_SHA} ." achieve?|Tags the image with the commit SHA for traceability|Pushes the image|Runs tests|Scans the image|SHA tags link images to commits.
+Docker|M|Why keep one process per container?|Simpler lifecycle, scaling and logging; the orchestrator manages processes|Docker cannot run two processes|It improves CPU|It is required by Go|Sidecars handle extra concerns.
+Docker|H|What does the -trimpath and -ldflags "-s -w" build flags help with?|Reproducible builds without local paths and smaller binaries without debug symbols|Faster tests|Encryption|Race detection|Optional optimizations.
+Docker|E|What is a container?|A running, isolated instance of an image|A Dockerfile|A VM image|A registry|Lightweight isolation on a shared kernel.
+Docker|M|Which ECR feature scans images on push?|ECR image scanning (basic or enhanced with Inspector)|ECR lifecycle policies|ECR replication|ECR pull-through cache|Complements Trivy in CI.
+ECS|E|What is Amazon ECS?|A managed container orchestration service|A database|A Git server|A DNS service|Runs the Order Service containers.
+ECS|E|What is AWS Fargate?|A serverless compute engine for containers — no servers to manage|A Kong plugin|A CI tool|A load balancer|ECS on Fargate is the target runtime.
+ECS|E|What is a task definition?|A blueprint describing containers, image, CPU/memory, ports, roles and env|A running container|A Jira task|A CloudFormation stack|Versioned revisions.
+ECS|E|What is an ECS service?|Keeps a desired number of tasks running and replaces failed ones|A single container run|A Lambda|A VPC|Also integrates with load balancers.
+ECS|M|What is the task execution role used for?|Pulling images from ECR, writing logs and fetching secrets referenced in the task definition|The app's DynamoDB calls|Kong auth|CloudFormation deploys|App calls use the task role.
+ECS|M|Which network mode does Fargate use?|awsvpc (each task gets its own ENI and security group)|bridge|host|none|Per-task SGs enable least privilege.
+ECS|M|How does ECS perform a rolling deployment?|Starts new tasks with the new revision and drains old ones per min/max healthy percent|Stops all tasks then starts new|Rebuilds the image|Creates a new cluster|Configurable deployment settings.
+ECS|M|What does the deployment circuit breaker do?|Detects failing deployments and can roll back automatically|Limits API requests|Stops CloudFormation drift|Encrypts tasks|Enable with rollback.
+ECS|M|How do container logs reach CloudWatch or Datadog?|Via the log driver (awslogs) or FireLens/Datadog agent sidecar|By SSH|They cannot|Through Kong|Configured in the task definition.
+ECS|M|What triggers ECS service auto scaling?|Target tracking on metrics like CPU, memory or ALB request count (or SQS backlog via custom metric)|Git commits|Jira tickets|Route 53 TTL|Scale on real load signals.
+ECS|H|Tasks start then stop repeatedly with exit code 1. First place to look?|The container logs and stopped task reason in ECS|Kong config|Route 53|Jira|Often missing env/secret or bad config.
+ECS|H|Why set stopTimeout and handle SIGTERM in Go?|ECS sends SIGTERM then SIGKILL; graceful shutdown finishes requests/messages|To speed up startup|To skip health checks|SIGTERM is ignored by ECS|Avoids dropped work during deploys.
+ECS|M|Where are ECS tasks placed per the DoD?|Private subnets with security groups allowing only needed traffic|Public subnets with public IPs|The default VPC|Any subnet|Matches the network DoD.
+ECS|E|Which ECS component defines CPU and memory for Fargate?|The task definition (task-level cpu/memory)|The cluster|The service name|The ECR repo|Fargate needs valid CPU/memory combos.
+ECS|M|What is ECS Exec?|A feature to run commands in a running container securely via SSM|SSH access|A CI runner|A Kong plugin|Audited debugging access.
+ECS|H|Should a consumer reading SQS be a separate ECS service from the HTTP API?|Usually yes, so they scale and deploy independently|Never|Only on EC2|It must be the same container|Different workloads, different scaling signals.
+ECS|M|What does the ALB target group health check decide?|Whether a task receives traffic and stays registered|Image vulnerabilities|IAM permissions|DNS TTL|Unhealthy targets are drained.
+ECS|E|Which file in the repo describes the task definition as code?|A CloudFormation template (AWS::ECS::TaskDefinition)|README.md|go.sum|openapi.yaml|All infra via CloudFormation.
+ECS|H|Fargate task cannot fetch a Secrets Manager secret at start. Likely cause?|Execution role lacks secretsmanager:GetSecretValue (and kms:Decrypt) or no network path/endpoint|Task role lacks dynamodb:PutItem|Kong is down|Wrong Go version|Startup secrets use the execution role.
+ECS|M|What does desiredCount = 2 across two AZs give you?|Basic high availability if one task or AZ fails|Double encryption|Half the cost|No benefit|Spread tasks across AZs.
+Lambda|E|What is AWS Lambda?|Serverless functions that run code in response to events without managing servers|A container registry|A database|A queue|Used for the scheduled cancel job.
+Lambda|E|Which runtime is used for Go Lambdas today?|provided.al2023 (OS-only runtime) with a bootstrap binary|go1.x (current recommended)|nodejs|python|go1.x is deprecated.
+Lambda|E|What is the maximum Lambda execution time?|15 minutes|1 hour|5 seconds|Unlimited|Long jobs need ECS or Step Functions.
+Lambda|M|What is a cold start?|Extra latency when Lambda initializes a new execution environment|A failed deploy|A frozen container|A DLQ|Go cold starts are relatively small.
+Lambda|M|Where should SDK clients be created in a Go Lambda?|Outside the handler (init/main) so they are reused across invocations|Inside the handler every time|In the event payload|Never|Reuse across warm invocations.
+Lambda|M|Which Go package wires the handler?|github.com/aws/aws-lambda-go/lambda with lambda.Start(handler)|net/http only|gin.Run|os.Exec|Standard Lambda Go library.
+Lambda|M|How does a Lambda get permissions to update DynamoDB?|Its execution role with least-privilege policies|Access keys in environment variables|The caller's credentials automatically|Kong|Same IAM principles.
+Lambda|M|What is reserved concurrency?|A cap and guarantee on concurrent executions for a function|Memory size|Timeout|Number of layers|Protects downstream systems.
+Lambda|H|An SQS-triggered Lambda processes a batch and one message fails. With ReportBatchItemFailures, what happens?|Only failed message IDs are returned to the queue for retry|The whole batch is retried|All are deleted|The Lambda stops|Partial batch responses.
+Lambda|H|Why might Lambda be preferred over ECS for the nightly cancel job?|Short, infrequent work: pay per invocation, no always-on tasks|Lambda has no limits|ECS cannot run jobs|Lambda supports Gin better|Match runtime to workload.
+Lambda|E|Which service triggers the nightly Lambda in the capstone?|EventBridge Scheduler|Kong|RDS|GitHub|Schedules invoke targets.
+Lambda|M|What does increasing Lambda memory also increase?|CPU allocated proportionally|Timeout|Disk only|Concurrency limit|Memory and CPU scale together.
+Lambda|M|Where do Lambda logs go by default?|Amazon CloudWatch Logs|S3|Kong|Jira|Forward to Datadog via extension/forwarder.
+Lambda|H|A Lambda in a VPC needs to call DynamoDB with no NAT. What enables it?|A DynamoDB gateway VPC endpoint|Public IP on Lambda|Kong|Route 53 alias|Private subnet → endpoint.
+Lambda|M|What is the Lambda deployment package for Go?|A zip containing the compiled bootstrap binary (or a container image)|The source code only|A Dockerfile only|go.mod|Build for linux/arm64 or amd64.
+CloudFormation|E|What is AWS CloudFormation?|Infrastructure as code: templates that create and manage AWS resources as stacks|A CI/CD service|A monitoring tool|A container runtime|DoD: 100% of infra via CloudFormation.
+CloudFormation|E|What is a stack?|A set of resources created and managed together from one template|A Go call stack|A Docker layer|A Jira board|Update and delete as one unit.
+CloudFormation|E|Which template section declares the AWS resources?|Resources|Outputs|Parameters|Mappings|The only required section.
+CloudFormation|E|What are Parameters for?|Inputs that customize a template per environment|Outputs of resources|IAM users|Secret values in plain text|e.g. EnvName, ImageTag.
+CloudFormation|M|What does !Ref do?|Returns the value of a parameter or the default identifier of a resource|Imports a file|Creates a reference document|Deletes a resource|e.g. !Ref OrdersTable returns the table name.
+CloudFormation|M|What does !GetAtt return?|A specific attribute of a resource, e.g. a table's Arn|A parameter value|A Git attribute|A tag|!GetAtt OrdersTable.Arn.
+CloudFormation|M|What are Outputs used for?|Exposing values like queue URLs, optionally exported for other stacks|Defining resources|Running tests|Storing secrets|Cross-stack references with Export/ImportValue.
+CloudFormation|M|What is a change set?|A preview of the changes a stack update will make before executing it|A Git diff|A rollback|A Lambda version|Review replacements before applying.
+CloudFormation|M|What is stack drift?|Differences between the deployed resources and the template due to manual changes|A slow deploy|A failed rollback|A template syntax error|DoD: zero drift.
+CloudFormation|M|How do you check for drift?|Run DetectStackDrift and review drift status per resource|Run go vet|Check Kong logs|Count resources|Fix by updating the template, not the console.
+CloudFormation|M|What happens when a stack update fails?|CloudFormation rolls back to the last known good state by default|Resources are deleted|It retries forever|It ignores the error|Read the events to find the cause.
+CloudFormation|M|Which tool lints CloudFormation templates in CI?|cfn-lint|golangci-lint|Spectral|Trivy only|Catch errors before deploy.
+CloudFormation|H|Some property changes cause "Replacement". Why is that dangerous for a DynamoDB table?|A new table is created and the old one deleted, losing data unless protected|It is faster|It saves cost|Nothing happens|Use DeletionPolicy/UpdateReplacePolicy: Retain and review change sets.
+CloudFormation|H|What does DeletionPolicy: Retain do?|Keeps the resource when it is removed from the stack or the stack is deleted|Deletes faster|Encrypts the resource|Retains old versions of code|Protects stateful resources.
+CloudFormation|H|Someone changed a security group rule in the console. Correct fix per DoD?|Update the template (or revert the manual change) and redeploy so drift returns to zero|Leave it|Document it in Confluence only|Delete the stack|Template is the source of truth.
+CloudFormation|E|Which file formats can templates use?|YAML or JSON|Go|XML|HCL|YAML is more readable.
+CloudFormation|M|What does the AWS::SQS::Queue RedrivePolicy property set?|The DLQ ARN and maxReceiveCount|Encryption|Visibility timeout|FIFO mode|DLQs as code.
+CloudFormation|M|What is a nested stack?|A stack created as a resource inside another stack to modularize templates|A Docker layer|A failed stack|A stack in another region|Reuse common components.
+CloudFormation|H|Why pass the image tag as a parameter instead of hardcoding it?|The pipeline can deploy each new commit SHA without editing the template|Parameters are encrypted|Hardcoding is illegal|It speeds up ECS|Immutable tags flow through the pipeline.
+CloudFormation|M|What are stack policies used for?|Preventing updates to critical resources during stack updates|IAM user policies|Rate limiting|Kong routing|Extra protection for prod.
+CloudFormation|H|Which permission model is safer for the pipeline deploying stacks?|A CloudFormation service role with scoped permissions passed via iam:PassRole|Admin keys on the CI server|The trainee's personal role|Root user|Least privilege for deployments.
+CloudFormation|E|Which command deploys a template from the CLI?|aws cloudformation deploy --template-file ... --stack-name ...|aws cfn run|aws stack up|cfn apply|deploy creates or updates via change sets.
+CloudFormation|M|What does the Conditions section allow?|Creating resources or setting properties only for certain environments|Running tests|Branching Git|Choosing regions automatically|e.g. IsProd.
+CloudFormation|H|What does "100% of infrastructure managed via CloudFormation" exclude?|Nothing created by hand in the console for the service, except bootstrap items explicitly documented|Only IAM roles|Only networking|Everything in the sandbox|Manual resources must be imported or recreated.
+CloudFormation|M|What does !Sub do?|Substitutes variables into a string, e.g. "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:orders"|Subtracts numbers|Creates a subnet|Subscribes to SNS|Pseudo parameters help build ARNs.
+GitHub Actions|E|What is GitHub Actions?|GitHub's CI/CD platform running workflows defined in YAML|A Git command|A code editor|A Kong plugin|Workflows live in .github/workflows.
+GitHub Actions|E|What triggers a workflow on every pull request?|on: pull_request|on: schedule only|on: release only|on: never|Also on: push for main.
+GitHub Actions|E|What is a job?|A set of steps that run on the same runner|A single shell command|A Git commit|A Docker image|Jobs can run in parallel or depend on each other.
+GitHub Actions|M|What does actions/setup-go do?|Installs a specific Go version (with caching) on the runner|Deploys to ECS|Lints YAML|Creates a Go module|Pin the version to match go.mod.
+GitHub Actions|M|What is the CI step order in the DoD pipeline?|lint → build → test → scan → push|push → test → lint|scan → deploy → build|test only|Cheap checks first; push only green builds.
+GitHub Actions|M|How should GitHub Actions authenticate to AWS?|OIDC federation with aws-actions/configure-aws-credentials assuming a role|Long-lived access keys in repo secrets|The root account|Hardcoded keys in the workflow|No static credentials.
+GitHub Actions|M|What does "needs: build" on a job do?|Makes the job wait for the build job to succeed|Installs dependencies|Caches files|Runs in parallel always|Defines job dependencies.
+GitHub Actions|M|How do you make CI required before merging?|Mark the workflow checks as required status checks in branch protection|Add a comment|Use workflow_dispatch|Name the workflow "required"|Enforced by GitHub.
+GitHub Actions|M|Why cache Go modules in CI?|Faster builds by reusing downloaded dependencies|To store secrets|To skip tests|To reduce coverage|setup-go has built-in caching.
+GitHub Actions|M|Where should CI secrets be stored?|GitHub encrypted secrets/environments (and preferably OIDC instead of keys)|In the workflow YAML|In README|In the Docker image|Never echo them in logs.
+GitHub Actions|H|Why pin third-party actions to a full commit SHA?|To prevent a compromised or retagged action from running malicious code|SHAs run faster|Tags are not allowed|It enables caching|Supply-chain security.
+GitHub Actions|H|Which permission setting reduces risk for workflows?|Set minimal permissions (e.g. contents: read, id-token: write only where needed)|permissions: write-all|No permissions block ever|Admin token in secrets|Least privilege for the GITHUB_TOKEN.
+GitHub Actions|E|Where do workflow files live?|.github/workflows/*.yml|/workflows|.circleci|Dockerfile|Version-controlled with code.
+GitHub Actions|M|What is a matrix build?|Running the same job across multiple configurations, e.g. Go versions|A parallel database|A Kong route table|A test report|Useful for libraries.
+GitHub Actions|H|A PR from a fork should not get AWS credentials. Which trigger choice protects you?|Use pull_request (no secrets for forks) and avoid running untrusted code with pull_request_target|Use pull_request_target for everything|Share keys with forks|Disable CI|Fork PRs are untrusted input.
+GitHub Actions|M|How can the workflow upload coverage results for reviewers?|Upload as an artifact or post a summary to the job summary/PR|Email the trainee|Write to Confluence manually|Not possible|Visibility of quality metrics.
+GitHub Actions|E|What does a red X on a PR check mean?|The workflow failed and the PR should not be merged|The PR is approved|The PR is merged|The check is skipped|Fix before merging.
+GitHub Actions|M|What does the go generate + git diff step in CI protect?|That generated code matches the contract with zero manual edits|Docker image size|AWS costs|Kong config|Module 1 DoD in CI.
+GitHub Actions|H|Where should deployment to the sandbox be triggered from?|A protected main branch after CI passes, with an environment and approvals as needed|Any feature branch automatically|A developer laptop|Pull requests from forks|Controlled path to environments.
+GitHub Actions|M|What is the GITHUB_SHA useful for?|Tagging images and artifacts with the exact commit|Encrypting secrets|Choosing Go version|Naming branches|Traceability from image to commit.
+Buildkite|E|What is Buildkite?|A CI/CD platform where pipelines run on your own agents|A Git host|A container registry|A monitoring tool|Used for deployment pipelines here.
+Buildkite|E|Where does a Buildkite pipeline usually get its steps?|A pipeline.yml in the repo (e.g. .buildkite/pipeline.yml)|The Buildkite UI only|go.mod|A Jira ticket|Pipelines as code.
+Buildkite|E|What is a Buildkite agent?|A small program on your infrastructure that runs pipeline jobs|A user account|A Docker image registry|A plugin marketplace|Agents can run in your AWS account.
+Buildkite|M|What does a block step do?|Pauses the pipeline until someone manually unblocks it (approval gate)|Blocks all builds forever|Deletes the build|Runs steps in parallel|DoD: manual gate before deploy.
+Buildkite|M|What does a wait step do?|Waits for all previous steps to pass before continuing|Sleeps for 60 seconds|Waits for a Git push|Pauses for approval|Separates stages.
+Buildkite|M|Why run Buildkite agents inside your own AWS account?|They can use IAM roles to deploy without exposing credentials externally|They are mandatory|They are faster than any SaaS|They avoid IAM|Elastic CI Stack for AWS is common.
+Buildkite|M|How do you pass the image tag from CI to the deploy step?|Use build metadata or an artifact (e.g. buildkite-agent meta-data set image_tag)|Hardcode latest|Email it|Re-build the image in deploy|Promote the same artifact.
+Buildkite|M|Why promote the same image from sandbox to later environments instead of rebuilding?|Guarantees what was tested is what is deployed|Rebuilding is not allowed|Images cannot be copied|It is required by ECS|Build once, deploy many.
+Buildkite|H|How should secrets be provided to Buildkite steps?|Through agent-side secret hooks/Secrets Manager, not in pipeline.yml|In pipeline.yml env|In the repo|In build messages|Keep secrets out of version control.
+Buildkite|M|What are Buildkite plugins used for?|Reusable step behavior, e.g. Docker or ECR login|Database migrations only|Kong routing|IAM policies|Pin plugin versions.
+Buildkite|E|What is the difference in roles between GitHub Actions and Buildkite in this bootcamp?|GitHub Actions runs PR CI checks; Buildkite runs the deploy pipeline with an approval gate|They do exactly the same|Buildkite hosts code|GitHub Actions runs Kong|Each tool has a clear job.
+Buildkite|H|A deploy step fails after the block step. What should happen?|The pipeline stops; ECS circuit breaker/CloudFormation rollback restores the last good version and the team investigates|Keep deploying other steps|Unblock again repeatedly|Delete the stack|Safe failure path.
+Buildkite|M|What does "concurrency" with a concurrency group do in Buildkite?|Limits how many jobs of a group run at once, e.g. one deploy at a time|Runs all jobs in parallel|Encrypts jobs|Caches builds|Prevents overlapping deploys.
+Buildkite|H|How do you make deployments auditable?|Each deploy records commit, image tag, approver and time in the pipeline and links to the Jira issue|Deploy from laptops|Skip approvals|Delete build logs|Traceability end to end.
+Buildkite|E|Which step type is used to require human approval before production-like deploys?|block|command|wait|trigger|block/input steps gate progress.

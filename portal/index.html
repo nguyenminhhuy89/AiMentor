@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AiMentor Bootcamp Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a calm ops board for a training lead — finding first, then the detail.
+   IDEA: the cohort's wall planner: 15 day-cards pinned in three weekly rows.
+   PICTURE: the 15-day module strip, today ringed, exam days marked.
+   COLOUR and TYPE: white, ink #101418, yellow slab behind the day number only, slate; one hue per module. Manrope.
+   LAYOUT: header figure + strip on top, tabs, then each view as one calm column of tables. */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#101418);--ink:light-dark(#101418,#eef1f4);--sub:light-dark(#5b6472,#9aa3af);--line:light-dark(#e3e6ea,#262c33);--card:light-dark(#f6f7f9,#171c22);--y:#ffd84a;--ok:light-dark(#1f7a3a,#5fd07f);--bad:light-dark(#b42318,#ff7b6e);--warn:light-dark(#9a6700,#f2c14e);
+--m0:#7b8794;--m1:#2f6fde;--m2:#11998e;--m3:#e8772e;--m4:#7c5cd6;--m5:#d64545;--m6:#3a9a4a}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,3.5vw,52px) max(5vw,16px)}.wrap{max-width:1240px;margin:0 auto}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;margin:0;text-wrap:balance;font-weight:800}
+h2{font-size:24px;line-height:1.15;margin:0 0 12px;font-weight:800}h3{font-size:17px;margin:0 0 6px}
+.sub{color:var(--sub)}small,.sm{font-size:13px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(20px,3vw,44px);align-items:start}
+.slab{display:inline-block;background:var(--y);color:#101418;padding:2px 14px 4px;margin:10px 0 8px;font-size:clamp(40px,6vw,64px);font-weight:800;line-height:1.05}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+.kpi{border-top:2px solid var(--ink);padding-top:6px}.kpi b{display:block;font-size:26px;font-weight:800;white-space:nowrap}
+.strip{display:grid;grid-template-columns:52px repeat(5,minmax(0,1fr));gap:6px}
+.wk{font-size:13px;color:var(--sub);align-self:center}
+.day{position:relative;border:0;border-radius:6px;padding:8px 9px 10px;min-height:86px;text-align:left;color:#fff;font:inherit;cursor:pointer;background:var(--c)}
+.day .n{font-size:15px;font-weight:800;display:block}.day .dt{font-size:12px;opacity:.9;display:block}.day .t{font-size:13px;line-height:1.25;font-weight:600;display:block;margin-top:2px}
+.day.ex::after{content:"Exam";position:absolute;right:6px;top:6px;font-size:11px;font-weight:800;background:#fff;color:#101418;border-radius:3px;padding:0 5px}
+.day.today{outline:3px solid var(--y);outline-offset:2px}.day.past{opacity:.55}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;color:var(--sub)}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;background:var(--c)}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:0 max(5vw,16px)}
+nav.tabs a{flex:none;padding:12px 12px;color:var(--sub);text-decoration:none;font-weight:700;border-bottom:3px solid transparent;min-height:44px}
+nav.tabs a.on{color:var(--ink);border-color:var(--ink)}
+section.view{display:none}section.view.on{display:block}
+.grid2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px}
+.card{background:var(--card);border-radius:8px;padding:18px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:13px;color:var(--sub);font-weight:700}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dep{display:inline-block;font-size:11px;font-weight:800;border-radius:3px;padding:0 5px;margin-right:6px;border:1px solid currentColor}
+.dep.H{color:var(--ok)}.dep.G{color:var(--warn)}.dep.A{color:var(--sub)}
+.tag{display:inline-block;font-size:12px;font-weight:700;border-radius:3px;padding:1px 6px;color:#fff;background:var(--c);white-space:nowrap}
+.pass{color:var(--ok);font-weight:800}.fail{color:var(--bad);font-weight:800}.muted{color:var(--sub)}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.bar>i{display:block;height:100%;background:var(--c,var(--ink))}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.row>label{flex:1 1 160px}
+label{display:block;font-size:13px;font-weight:700;color:var(--sub)}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-height:44px}
+textarea{min-height:110px}
+button.b{font:inherit;font-weight:700;min-height:44px;padding:8px 16px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+button.g{background:transparent;color:var(--ink)}button.b:disabled{opacity:.45;cursor:not-allowed}
+button.x{font:inherit;border:0;background:none;color:var(--sub);cursor:pointer;min-height:36px;padding:4px 8px}
+:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.note{font-size:13px;color:var(--sub);margin:8px 0}.msg{min-height:22px;font-size:14px;margin-top:8px}
+.cb{width:24px;height:24px;min-height:0;accent-color:var(--m6)}
+.dlg{position:fixed;inset:0;background:rgba(10,12,16,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:20;overflow:auto}
+.dlg.on{display:flex}.dlg>div{background:var(--bg);border-radius:10px;max-width:760px;width:100%;padding:22px}
+.agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}.agents .card{border-left:4px solid var(--c)}
+pre{background:var(--card);padding:12px;border-radius:6px;font-size:13px;overflow-x:auto;white-space:pre-wrap}
+.scroll{overflow-x:auto}
+@media(max-width:900px){.hero,.grid2{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.strip{grid-template-columns:repeat(5,minmax(0,1fr))}.wk{grid-column:1/-1}.day{min-height:64px;padding:6px}.day .t,.day .dt{display:none}.day.ex::after{content:"E"}
+table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--sub)}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:no-preference){.day{transition:transform .15s}.day:hover{transform:translateY(-2px)}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<header class="band"><div class="wrap hero">
+  <div>
+    <div class="sub" style="font-weight:700">AiMentor · Cloud-native Go bootcamp for freshers</div>
+    <div class="slab" id="dayBig">Day –</div>
+    <h1 id="dayTitle">Loading the programme…</h1>
+    <p class="sub" id="dayMeta" style="margin:8px 0 0"></p>
+    <div class="kpis">
+      <div class="kpi"><span class="sm sub">Trainees</span><b id="kT">–</b></div>
+      <div class="kpi"><span class="sm sub">Avg score</span><b id="kA">–</b></div>
+      <div class="kpi"><span class="sm sub">Pass rate</span><b id="kP">–</b></div>
+      <div class="kpi"><span class="sm sub">DoD done</span><b id="kD">–</b></div>
+    </div>
+  </div>
+  <div>
+    <div class="strip" id="strip" aria-label="15-day timeline"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</div></header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main class="band"><div class="wrap">
+<div class="msg" id="dbMsg" role="status"></div>
+
+<section class="view" id="v-overview">
+  <div class="grid2">
+    <div><h2 id="todayH">Today</h2><div id="todayBody" class="card"></div></div>
+    <div>
+      <h2>Module pass rates</h2><div id="modBars"></div>
+      <h2 style="margin-top:26px">Needs attention</h2><div id="risk"></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-timeline">
+  <h2>Three weeks, fifteen days</h2>
+  <p class="sub">Depth: <span class="dep H">H</span>hands-on, must build · <span class="dep G">G</span>guided from a template · <span class="dep A">A</span>awareness, explain and diagram. Every lab is a commit to the same capstone — the Order Service.</p>
+  <div id="tl"></div>
+  <h2 style="margin-top:28px">How each module is assessed</h2>
+  <table class="stack"><thead><tr><th>Part</th><th class="num">Weight</th><th>How</th></tr></thead><tbody>
+  <tr><td>Theory quiz</td><td class="num">30%</td><td>15–20 MCQ and short answers, AI-graded</td></tr>
+  <tr><td>Practical lab</td><td class="num">50%</td><td>Rubric mapped to the Definition of Done; any failed MUST item caps the module at 69</td></tr>
+  <tr><td>Code quality</td><td class="num">20%</td><td>go lint, build, test green; coverage; PR hygiene</td></tr>
+  </tbody></table>
+  <p class="note">Pass at 70. Below 70 the tutor agent writes a remediation plan and the trainee retakes within 48 hours. Final grade = module average × 0.8 + capstone demo × 0.2.</p>
+</section>
+
+<section class="view" id="v-trainees">
+  <h2>Trainees</h2>
+  <form id="tForm" class="row card">
+    <label>Trainee ID<input id="tId" required pattern="[A-Za-z0-9-]+" placeholder="FA001"></label>
+    <label>Full name<input id="tName" required placeholder="Nguyen Van An"></label>
+    <label>Email<input id="tEmail" type="email" placeholder="an.nv@company.com"></label>
+    <label>Team<input id="tTeam" placeholder="Squad A"></label>
+    <button class="b" type="submit">Add trainee</button>
+  </form>
+  <div class="msg" id="tMsg"></div>
+  <table class="stack" id="tTable"><thead><tr><th>ID</th><th>Name</th><th>Team</th><th class="num">Modules passed</th><th class="num">Running grade</th><th>DoD</th><th></th></tr></thead><tbody></tbody></table>
+</section>
+
+<section class="view" id="v-exams">
+  <h2>Exam submissions from Google Drive</h2>
+  <p class="sub">Trainees upload to <b id="folderLbl">AiMentor/Exams</b>, one file per module, named <code>TraineeID_FullName_M1</code>. Scan to list them, then grade each with Claude against the module rubric and review before saving, or run the full flow to scan, grade and save everything new (borderline scores are flagged for review).</p>
+  <div class="row"><button class="b" id="scanBtn">Scan Drive</button><button class="b g" id="flowBtn">Scan &amp; run full flow</button><label style="flex:0 1 200px">Show<select id="exFilter"><option value="all">All files</option><option value="new">Ungraded only</option></select></label></div>
+  <div class="msg" id="exMsg" role="status"></div>
+  <table class="stack" id="exTable"><thead><tr><th>File</th><th>Trainee</th><th>Module</th><th>Modified</th><th>Status</th><th></th></tr></thead><tbody></tbody></table>
+  <p class="note">Can't use the connector here? Ask the <b>exam-grader</b> agent in Claude ("/grade-exams") — it reads the same folder and writes into this portal.</p>
+</section>
+
+<section class="view" id="v-reports">
+  <h2>Daily progress reports</h2>
+  <p class="sub">Each trainee keeps a copy of the progress template in the <b id="repLbl">DailyReport</b> Drive folder, named <code>TraineeID_FullName_Progress</code>. Scanning reads every sheet's Profile, Topic Tracker and DoD Checklist, adds new trainees to the roster and flags anyone behind plan.</p>
+  <div class="row"><button class="b" id="repBtn">Scan DailyReport</button></div>
+  <div class="msg" id="repMsg" role="status"></div>
+  <div id="repSummary" class="card" style="display:none;margin-top:12px"></div>
+  <table class="stack" id="repTable"><thead><tr><th>Trainee</th><th class="num">Done (with proof)</th><th class="num">Due by today</th><th class="num">Behind</th><th class="num">DoD met</th><th>Status</th><th>Flags</th><th>Scanned</th></tr></thead><tbody></tbody></table>
+  <p class="note">Rules: a Done topic without an evidence link counts as not done. Behind = topics due by today without proof. Watch at 3 or more behind, At risk at 6 or more, or any MUST item answered No.</p>
+</section>
+
+<section class="view" id="v-scores">
+  <h2>Scores by module</h2>
+  <p class="sub">Select a score to read the feedback or enter one by hand.</p>
+  <div class="scroll"><table id="sTable"></table></div>
+</section>
+
+<section class="view" id="v-dod">
+  <h2>Definition of Done</h2>
+  <p class="sub">Ticked by mentors or by the dod-auditor agent with evidence. Each column is a MUST item from the rubric.</p>
+  <div class="scroll"><table id="dTable"></table></div>
+  <div id="dodKey" class="note"></div>
+</section>
+
+<section class="view" id="v-team">
+  <h2>The agent team</h2>
+  <p class="sub">Install the <b>ai-mentor</b> plugin in Claude. Each agent knows the syllabus, the rubric and this portal.</p>
+  <div class="agents" id="agents"></div>
+  <h2 style="margin-top:26px">Skills you can call</h2>
+  <table class="stack"><thead><tr><th>Command</th><th>What it does</th><th>Who uses it</th></tr></thead><tbody id="skills"></tbody></table>
+</section>
+
+<section class="view" id="v-setup">
+  <h2>Programme setup</h2>
+  <form id="setForm" class="card" style="display:grid;gap:12px;max-width:560px">
+    <label>Start date (a Monday)<input id="sStart" type="date" required></label>
+    <label>Drive folder holding the exams<input id="sFolder" required placeholder="AiMentor"></label>
+    <label>Drive folder holding daily progress reports<input id="sRep" placeholder="DailyReport"></label>
+    <label>Coverage threshold for business logic (%)<input id="sCov" type="number" min="0" max="100" placeholder="80"></label>
+    <button class="b" type="submit">Save setup</button>
+  </form>
+  <div class="msg" id="setMsg"></div>
+</section>
+</div></main>
+
+<div class="dlg" id="dlg" role="dialog" aria-modal="true"><div id="dlgBody"></div></div>
+
+<script>
+{
+const MODS={M0:{n:'Onboarding & Go',c:'var(--m0)'},M1:{n:'Contract & Core API',c:'var(--m1)'},M2:{n:'Data & Encryption',c:'var(--m2)'},M3:{n:'Async & Event-Driven',c:'var(--m3)'},M4:{n:'Gateway, Network & Security',c:'var(--m4)'},M5:{n:'Runtime, IaC & CI/CD',c:'var(--m5)'},M6:{n:'Quality, Observability & Ops',c:'var(--m6)'}};
+const DAYS=[
+{m:'M0',t:'Onboarding & tooling',k:'Day quiz',tp:[['Programme, Git/GitHub flow','H'],['GitHub Copilot setup','H'],['Jira & Confluence basics','H'],['How a cloud backend fits together','A']],lab:'Repo from template, first PR, Jira ticket, Confluence profile'},
+{m:'M0',t:'Go essentials + lint/test',k:'Day quiz',tp:[['Go syntax, structs, interfaces, errors, context','H'],['go build, go test, golangci-lint','H']],lab:'Order domain types with table-driven tests; lint passes'},
+{m:'M1',t:'OpenAPI 3.0 & JSON Schema',k:'Contract review',tp:[['REST & HTTP status codes','H'],['OpenAPI paths, components, $ref','H'],['JSON Schema validation & error schema','H']],lab:'openapi.yaml for create/get/list/cancel order'},
+{m:'M1',t:'oapi-codegen v2 & Gin middleware',k:'Day quiz',tp:[['oapi-codegen v2 strict server, Gin, client, types','H'],['Request/trace ID, logging, recovery, RFC 7807 errors','H']],lab:'Generated code via go generate (zero edits), middleware chain'},
+{m:'M1',t:'Handlers, service layer, Copilot',k:'Module 1 exam',ex:1,tp:[['Handlers → service → repository','H'],['Copilot for tests and refactors','H']],lab:'Working API, ≥70% business-logic coverage'},
+{m:'M2',t:'AWS basics, SDK for Go, S3',k:'Day quiz',tp:[['Regions, IAM users vs roles, CLI profiles','H'],['SDK v2 config & credential chain','H'],['S3 put/get, presigned URLs','H']],lab:'Invoice upload to S3 (LocalStack, then sandbox)'},
+{m:'M2',t:'DynamoDB & RDS',k:'Day quiz',tp:[['DynamoDB keys, GSIs, conditional writes','H'],['RDS Postgres with pgx, migrations','G'],['Choosing SQL vs NoSQL','A']],lab:'Orders in DynamoDB, customers in RDS behind interfaces'},
+{m:'M2',t:'KMS encryption of PII',k:'Module 2 exam',ex:1,tp:[['KMS keys, envelope encryption, encryption context','H'],['Encrypt PII before persist, decrypt on read','H']],lab:'No plaintext PII anywhere; KMS mocked in tests'},
+{m:'M3',t:'SNS, SQS, EventBridge',k:'Day quiz',tp:[['Events vs commands','A'],['SNS fan-out to SQS','H'],['EventBridge bus, rules, schema','H'],['EventBridge Scheduler','G']],lab:'OrderPlaced published and consumed; scheduled cancel job'},
+{m:'M3',t:'Idempotency & DLQ',k:'Module 3 exam',ex:1,tp:[['At-least-once delivery, idempotency keys','H'],['SQS DLQ, maxReceiveCount, redrive','H'],['CloudWatch alarm on DLQ depth','G']],lab:'Idempotent consumer + DLQ + alarm; duplicate-message test'},
+{m:'M4',t:'IAM, secrets & network',k:'Day quiz',tp:[['Least-privilege IAM','H'],['Secrets Manager vs Parameter Store vs AppConfig','H'],['VPC, subnets, security groups','G'],['VPC endpoints / PrivateLink, Route 53, CloudTrail','G'],['Megaport hybrid connectivity','A']],lab:'Zero hardcoded secrets; IAM policy per service; network diagram'},
+{m:'M4',t:'Kong & Cognito',k:'Module 4 exam',ex:1,tp:[['Kong routes, JWT plugin, rate limiting','H'],['Cognito user pool & tokens','H'],['Apigee Edge → Kong migration mapping','A']],lab:'Kong in front; Cognito JWT enforced; 429 on limit'},
+{m:'M5',t:'Docker, ECS, Lambda, CloudFormation',k:'Day quiz',tp:[['Multi-stage, non-root image + scan','H'],['ECS Fargate service','G'],['Lambda for the scheduler job','G'],['CloudFormation stacks & drift detection','H']],lab:'Image with 0 critical/high; CFN for DynamoDB, SQS+DLQ, ECS'},
+{m:'M5',t:'GitHub Actions & Buildkite',k:'Module 5 exam',ex:1,tp:[['GitHub Actions lint → build → test → scan → push','H'],['Buildkite deploy with manual gate','G'],['Branch protection','H']],lab:'Green CI on every PR; automated deploy to sandbox'},
+{m:'M6',t:'Observability, ops & demo',k:'Module 6 exam + final DoD',ex:1,tp:[['Datadog APM, Logs, Metrics','H'],['Datadog RUM','A'],['Trace/correlation ID end to end','H'],['CloudWatch, PagerDuty, Confluence runbooks, Rovo','G']],lab:'Dashboard + alert + runbook; capstone demo'}];
+const DOD=[['m1-contract','M1','All APIs in OpenAPI 3.0 + JSON Schema'],['m1-codegen','M1','oapi-codegen v2, zero manual edits'],['m2-kms','M2','PII encrypted with KMS'],['m3-dlq','M3','Every queue has a DLQ + alarm'],['m3-idem','M3','Consumers idempotent'],['m4-secrets','M4','Zero hardcoded secrets, right store per scope'],['m4-iam','M4','Least-privilege IAM'],['m4-kong','M4','Kong routing, auth, rate limit'],['m4-network','M4','Private subnets, endpoints, Route 53, CloudTrail'],['m5-image','M5','Non-root image, 0 critical/high'],['m5-cfn','M5','100% CloudFormation, zero drift'],['m5-pipeline','M5','Automated GitHub Actions + Buildkite deploy'],['m6-ci','M6','lint/build/test 100% in CI, coverage met'],['m6-trace','M6','Trace ID end to end in Datadog/CloudWatch'],['m6-ops','M6','Dashboards, PagerDuty, runbooks, Jira']];
+const RUBRIC={
+M1:'MUST: 100% endpoints in OpenAPI 3.0 with JSON Schema for request/response/error (10). MUST: oapi-codegen v2 output via go generate, zero manual edits (10). Gin middleware: request/trace ID, structured logging, recovery, RFC 7807 errors (15). Handlers delegate to service layer; validation errors 400 with detail (10). Explains Copilot code (5). Theory: HTTP verbs/status, OpenAPI structure, $ref, JSON Schema keywords, Go interfaces/errors, middleware order.',
+M2:'MUST: PII (email, phone) encrypted with KMS before persist, none in DB or logs (15). DynamoDB design with conditional writes; RDS via repository interface (15). S3 upload + presigned URL with expiry (10). MUST: default credential chain, no keys in code (5). Tests with mocks/LocalStack (5). Theory: IAM role vs user, DynamoDB keys/GSI, SQL vs NoSQL, envelope encryption, encryption context.',
+M3:'MUST: every SQS queue has a DLQ with redrive policy (10). MUST: consumers idempotent, duplicate-message test (15). SNS→SQS fan-out and EventBridge rule, schema documented (10). EventBridge Scheduler job (5). MUST: CloudWatch alarm on DLQ depth (10). Theory: at-least-once vs exactly-once, visibility timeout, maxReceiveCount, fan-out, event vs command.',
+M4:'MUST: zero hardcoded secrets; Secrets Manager for credentials, Parameter Store for config, AppConfig for flags (10). MUST: least-privilege IAM per service, no * on data stores (10). Kong route + Cognito JWT + rate limit 429 (15). Network design: private subnets, SGs, VPC endpoints, Route 53, CloudTrail (10). Apigee→Kong mapping (5). Theory: CIDR/subnets, SG vs NACL, PrivateLink, JWT, OAuth2 flows, Megaport.',
+M5:'MUST: multi-stage non-root image, 0 critical/high vulns (10). MUST: all infra in CloudFormation, no drift (15). ECS or Lambda deployed from pipeline (10). GitHub Actions lint→build→test→scan required on PR (10). Buildkite deploy with manual approval (5). Theory: image layers, ECS task vs service, Lambda limits, CFN changesets/drift, CI vs CD.',
+M6:'MUST: go lint/build/test 100% in CI, coverage ≥ threshold (10). MUST: trace/correlation ID API→queue→consumer visible in Datadog APM + logs (15). Dashboard with latency, errors, DLQ depth (10). PagerDuty alert from a monitor (5). Confluence runbook linked from alert; Jira tickets (10). Theory: golden signals, logs/metrics/traces, SLO/SLI, alert fatigue, incident flow.'};
+const AGENTS=[['mentor-lead','M0','Programme lead. Posts the daily plan, watches pace, routes questions, runs the Friday report, escalates to the human mentor.'],['tutor-contract-api','M1','Go basics, OpenAPI 3.0, JSON Schema, oapi-codegen v2, Gin middleware, Copilot. Days 1–5.'],['tutor-data-encryption','M2','AWS SDK for Go, S3, DynamoDB, RDS, KMS envelope encryption. Days 6–8.'],['tutor-async-events','M3','SNS, SQS, DLQ, EventBridge, Scheduler, idempotent consumers. Days 9–10.'],['tutor-gateway-security','M4','Kong, Cognito, IAM, Secrets Manager, Parameter Store, AppConfig, VPC, PrivateLink, Megaport, Route 53, CloudTrail. Days 11–12.'],['tutor-runtime-cicd','M5','Docker, ECS, Lambda, CloudFormation, GitHub Actions, Buildkite. Days 13–14.'],['tutor-quality-ops','M6','lint/build/test every day; Datadog, CloudWatch, PagerDuty, Jira, Confluence, Rovo on Day 15.'],['exam-grader','M3','Scans Google Drive exam folders, grades against the rubric, saves scores here, flags borderline cases.'],['dod-auditor','M6','Runs lint/test/codegen-diff/secret/image/IaC checks on a repo and records DoD evidence here.']];
+const SKILLS=[['/daily-plan','Today’s goals, schedule, lab steps and at-risk trainees','mentor-lead'],['/grade-exams M2','Grade new Drive submissions for a module and save them here','exam-grader'],['/module-quiz D4 · /module-quiz M3 exam','Daily quiz or module theory exam with answer key','tutors'],['/dod-check FA001 <repo>','Evidence-based DoD audit of a trainee’s code','dod-auditor'],['/progress-report week 2','Cohort scores, pass rates, risks, recommendations','mentor-lead']];
+const TABS=[['overview','Overview'],['timeline','Timeline'],['trainees','Trainees'],['exams','Exams'],['reports','Daily reports'],['scores','Scores'],['dod','DoD'],['team','Agent team'],['setup','Setup']];
+
+const DAILY_REPORT_FOLDER_ID='1iQLe_c_h2J8a5JXFZ7_7TyFb5evwA5fb';
+const S={trainees:[],scores:{},dod:{},settings:{startDate:'2026-11-30',driveFolder:'AiMentor',coverage:80},canWrite:true,files:[],progress:{}};
+let db=null,mcp=null,sample=null;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=x=>isFinite(x)?Math.round(x)+'%':'–';
+const say=(el,t,cls)=>{const e=$(el);e.textContent=t||'';e.className='msg '+(cls||'')};
+
+function workDay(){const s=new Date(S.settings.startDate+'T00:00:00'),t=new Date();t.setHours(0,0,0,0);
+ if(isNaN(s))return 0;if(t<s){let n=0,d=new Date(s);while(d>t){d.setDate(d.getDate()-1);n++}return -n}
+ let n=0,d=new Date(s);while(d<=t){const w=d.getDay();if(w>0&&w<6)n++;d.setDate(d.getDate()+1)}return n}
+function dateOf(i){const d=new Date(S.settings.startDate+'T00:00:00');let n=0;while(true){const w=d.getDay();if(w>0&&w<6){if(n===i)return d;n++}d.setDate(d.getDate()+1)}}
+const fmtD=d=>d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
+
+function totals(){const ts=S.trainees,sc=Object.values(S.scores);const avg=sc.length?sc.reduce((a,b)=>a+(+b.total||0),0)/sc.length:NaN;
+ const pr=sc.length?sc.filter(x=>x.pass).length/sc.length*100:NaN;const dd=Object.values(S.dod).filter(x=>x.done).length;const dp=ts.length?dd/(ts.length*DOD.length)*100:NaN;return{avg,pr,dp}}
+function grade(id){const m=['M1','M2','M3','M4','M5','M6'].map(k=>S.scores[id+'_'+k]).filter(Boolean);if(!m.length)return null;return{n:m.filter(x=>x.pass).length,cnt:m.length,avg:m.reduce((a,b)=>a+(+b.total||0),0)/m.length}}
+
+function renderHeader(){const w=workDay();let i=Math.min(Math.max(w,1),15)-1;
+ if(w<1){$('dayBig').textContent='Starts in '+(-w)+'d';}else if(w>15){$('dayBig').textContent='Completed';}else $('dayBig').textContent='Day '+w+' of 15';
+ const D=DAYS[i];$('dayTitle').textContent=(w<1?'First up: ':w>15?'Last day: ':'')+D.t;
+ $('dayMeta').textContent=MODS[D.m].n+' · '+fmtD(dateOf(i))+' · check: '+D.k;
+ const t=totals();$('kT').textContent=S.trainees.length;$('kA').textContent=isFinite(t.avg)?Math.round(t.avg):'–';$('kP').textContent=pct(t.pr);$('kD').textContent=pct(t.dp);
+ $('strip').innerHTML=[0,1,2].map(wk=>`<span class="wk">Week ${wk+1}</span>`+DAYS.slice(wk*5,wk*5+5).map((d,j)=>{const n=wk*5+j+1;return `<button class="day${d.ex?' ex':''}${n===w?' today':''}${n<w?' past':''}" style="--c:${MODS[d.m].c}" data-day="${n}" aria-label="Day ${n}: ${esc(d.t)}"><span class="n">D${n}</span><span class="dt">${esc(fmtD(dateOf(n-1)))}</span><span class="t">${esc(d.t)}</span></button>`}).join('')).join('');
+ $('legend').innerHTML=Object.entries(MODS).map(([k,v])=>`<span><i style="--c:${v.c}"></i>${k==='M0'?'':k+' '}${esc(v.n)}</span>`).join('');}
+
+function dayCard(n){const d=DAYS[n-1];return `<div style="margin-bottom:8px"><span class="tag" style="--c:${MODS[d.m].c}">${d.m==='M0'?'Onboarding':d.m}</span> <b>Day ${n} · ${esc(d.t)}</b> <span class="sm sub">${esc(fmtD(dateOf(n-1)))}</span></div><ul style="margin:6px 0 10px;padding-left:18px">${d.tp.map(([x,l])=>`<li><span class="dep ${l}">${l}</span>${esc(x)}</li>`).join('')}</ul><div class="sm"><b>Lab output:</b> ${esc(d.lab)}</div><div class="sm"><b>Check:</b> ${esc(d.k)}</div>`}
+
+function renderOverview(){const w=workDay(),n=Math.min(Math.max(w,1),15);$('todayH').textContent=w<1?'First day':w>15?'Programme finished':'Today';
+ $('todayBody').innerHTML=dayCard(n)+`<p class="note" style="margin-top:14px">Rhythm: 09:00 stand-up · 09:15 concept · 10:30 lab · 13:30 lab with AI tutor · 16:30 day quiz · 17:00 commit, PR, Confluence log.</p>`;
+ $('modBars').innerHTML=['M1','M2','M3','M4','M5','M6'].map(m=>{const r=Object.values(S.scores).filter(x=>x.module===m);const p=r.length?r.filter(x=>x.pass).length/r.length*100:0;
+  return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between" class="sm"><span>${m} ${esc(MODS[m].n)}</span><span class="num">${r.length?pct(p)+' of '+r.length:'no scores yet'}</span></div><div class="bar" style="--c:${MODS[m].c}"><i style="width:${p}%"></i></div></div>`}).join('');
+ const due=DAYS.map((d,i)=>d.ex&&i+1<=w?d.m:null).filter(Boolean);const risk=[];
+ for(const t of S.trainees){const why=[];for(const m of due){const s=S.scores[t.id+'_'+m];if(!s)why.push(m+' not submitted');else if(!s.pass)why.push(m+' failed ('+s.total+')')}const pg=S.progress[t.id];if(pg&&!pg.isSample&&(pg.status==='At risk'||pg.status==='Watch'))why.push('Daily report: '+pg.status+' ('+pg.behind+' behind)');if(why.length)risk.push([t,why])}
+ $('risk').innerHTML=!S.trainees.length?'<p class="sub">Add trainees on the Trainees tab.</p>':risk.length?`<table class="stack"><thead><tr><th>Trainee</th><th>Why</th></tr></thead><tbody>${risk.map(([t,w])=>`<tr><td>${esc(t.name)}</td><td>${esc(w.join(' · '))}</td></tr>`).join('')}</tbody></table>`:'<p class="pass">Nobody is behind on exams due so far.</p>';}
+
+function renderTimeline(){$('tl').innerHTML=[0,1,2].map(wk=>`<h3 style="margin-top:20px">Week ${wk+1}</h3><table class="stack"><thead><tr><th>Day</th><th>Module</th><th>Topics</th><th>Lab output</th><th>Check</th></tr></thead><tbody>${DAYS.slice(wk*5,wk*5+5).map((d,j)=>{const n=wk*5+j+1;return `<tr><td style="white-space:nowrap"><b>D${n}</b><br><span class="sm sub">${esc(fmtD(dateOf(n-1)))}</span></td><td><span class="tag" style="--c:${MODS[d.m].c}">${d.m==='M0'?'Start':d.m}</span></td><td>${d.tp.map(([x,l])=>`<div><span class="dep ${l}">${l}</span>${esc(x)}</div>`).join('')}</td><td>${esc(d.lab)}</td><td>${d.ex?'<b>':''}${esc(d.k)}${d.ex?'</b>':''}</td></tr>`}).join('')}</tbody></table>`).join('')}
+
+function renderTrainees(){const tb=$('tTable').tBodies[0];tb.innerHTML=S.trainees.length?S.trainees.map(t=>{const g=grade(t.id);const dd=DOD.filter(([k])=>S.dod[t.id+'_'+k]?.done).length;
+ return `<tr><td>${esc(t.id)}</td><td>${esc(t.name)}<div class="sm sub">${esc(t.email||'')}</div></td><td>${esc(t.team||'')}</td><td class="num">${g?g.n+' / '+g.cnt:'–'}</td><td class="num">${g?Math.round(g.avg):'–'}</td><td style="min-width:110px"><div class="bar" style="--c:var(--m6)"><i style="width:${dd/DOD.length*100}%"></i></div><span class="sm sub">${dd}/${DOD.length}</span></td><td>${S.canWrite?`<button class="x" data-del="${esc(t.id)}" aria-label="Remove ${esc(t.name)}">Remove</button>`:''}</td></tr>`}).join(''):'<tr><td colspan="7" class="sub">No trainees yet. Add the cohort above.</td></tr>'}
+
+function renderScores(){const ms=['M1','M2','M3','M4','M5','M6'];$('sTable').innerHTML=`<thead><tr><th>Trainee</th>${ms.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Avg</th></tr></thead><tbody>${S.trainees.length?S.trainees.map(t=>{const g=grade(t.id);return `<tr><td>${esc(t.name)}</td>${ms.map(m=>{const s=S.scores[t.id+'_'+m];return `<td class="num"><button class="x ${s?(s.pass?'pass':'fail'):''}" data-score="${esc(t.id)}|${m}">${s?esc(s.total):'+'}</button></td>`}).join('')}<td class="num"><b>${g?Math.round(g.avg):'–'}</b></td></tr>`}).join(''):'<tr><td colspan="8" class="sub">No trainees yet.</td></tr>'}</tbody>`}
+
+function renderDod(){$('dTable').innerHTML=`<thead><tr><th>Trainee</th>${DOD.map(([k,m],i)=>`<th class="num" title="${esc(DOD[i][2])}">${i+1}</th>`).join('')}<th class="num">Done</th></tr></thead><tbody>${S.trainees.length?S.trainees.map(t=>{let c=0;const cells=DOD.map(([k])=>{const d=S.dod[t.id+'_'+k];if(d?.done)c++;return `<td class="num"><input type="checkbox" class="cb" data-dod="${esc(t.id)}|${k}" ${d?.done?'checked':''} ${S.canWrite?'':'disabled'} aria-label="${esc(t.name)} ${k}" title="${esc(d?.note||'')}"></td>`}).join('');return `<tr><td style="white-space:nowrap">${esc(t.name)}</td>${cells}<td class="num"><b>${c}/${DOD.length}</b></td></tr>`}).join(''):'<tr><td colspan="17" class="sub">No trainees yet.</td></tr>'}</tbody>`;
+ $('dodKey').innerHTML=DOD.map(([k,m,l],i)=>`<span style="display:inline-block;margin-right:14px"><b>${i+1}</b> <span class="tag" style="--c:${MODS[m].c}">${m}</span> ${esc(l)}</span>`).join('')}
+
+function renderExams(){$('folderLbl').textContent=S.settings.driveFolder+'/Exams';const f=$('exFilter').value;const tb=$('exTable').tBodies[0];
+ const rows=S.files.filter(x=>f==='all'||!x.graded);
+ tb.innerHTML=rows.length?rows.map(x=>`<tr><td>${x.url?`<a href="${esc(x.url)}">${esc(x.title)}</a>`:esc(x.title)}</td><td>${x.tid?esc((S.trainees.find(t=>t.id===x.tid)||{}).name||x.tid+' (not in roster)'):'<span class="fail">Unmatched name</span>'}</td><td>${x.mod?`<span class="tag" style="--c:${MODS[x.mod].c}">${x.mod}</span>`:'–'}</td><td class="sm" style="white-space:nowrap">${esc(x.mt?new Date(x.mt).toLocaleString():'')}</td><td>${x.graded?`<span class="pass">Graded ${esc(x.graded)}</span>`:'<span class="muted">New</span>'}</td><td>${x.tid&&x.mod?`<button class="b g" data-grade="${esc(x.id)}">${x.graded?'Re-grade':'Grade with AI'}</button>`:''}</td></tr>`).join(''):`<tr><td colspan="6" class="sub">${S.files.length?'Nothing ungraded.':'Scan Drive to list submissions.'}</td></tr>`}
+
+function renderAll(){renderHeader();renderOverview();renderTrainees();renderScores();renderDod();renderExams();renderReports();
+ $('sStart').value=S.settings.startDate;$('sFolder').value=S.settings.driveFolder;$('sCov').value=S.settings.coverage||80;$('sRep').value=S.settings.reportFolder||'DailyReport'}
+
+/* routing */
+$('tabs').innerHTML=TABS.map(([k,l])=>`<a href="#${k}" data-t="${k}">${l}</a>`).join('');
+function route(){const h=(location.hash||'#overview').slice(1);const k=TABS.some(t=>t[0]===h)?h:'overview';
+ document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+k));document.querySelectorAll('nav.tabs a').forEach(a=>a.classList.toggle('on',a.dataset.t===k))}
+addEventListener('hashchange',route);
+
+/* dialog */
+function openDlg(html){$('dlgBody').innerHTML=html+'<div style="text-align:right;margin-top:14px"><button class="b g" id="dlgClose">Close</button></div>';$('dlg').classList.add('on');$('dlgClose').focus()}
+function closeDlg(){$('dlg').classList.remove('on')}
+$('dlg').addEventListener('click',e=>{if(e.target.id==='dlg'||e.target.id==='dlgClose')closeDlg()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeDlg()});
+
+async function saveScore(tid,mod,o){const musts=o.musts||[];const theory=Math.max(0,Math.min(30,+o.theory||0)),practical=Math.max(0,Math.min(50,+o.practical||0)),quality=Math.max(0,Math.min(20,+o.quality||0));
+ let total=Math.round(theory+practical+quality);const mustFail=musts.some(m=>m.pass===false);if(mustFail)total=Math.min(total,69);
+ const doc={traineeId:tid,module:mod,theory,practical,quality,total,pass:total>=70&&!mustFail,musts,feedback:o.feedback||'',fileId:o.fileId||'',fileName:o.fileName||'',gradedBy:o.gradedBy||'mentor',gradedAt:new Date().toISOString()};
+ await db.doc('scores/'+tid+'_'+mod).set(doc);return doc}
+
+function scoreDialog(tid,mod){const s=S.scores[tid+'_'+mod]||{};const t=S.trainees.find(x=>x.id===tid)||{name:tid};
+ openDlg(`<h2>${esc(t.name)} · ${mod} ${esc(MODS[mod].n)}</h2>${s.total!=null?`<p><b class="${s.pass?'pass':'fail'}">${esc(s.total)} · ${s.pass?'Pass':'Fail'}</b> <span class="sm sub">by ${esc(s.gradedBy)} · ${esc(s.gradedAt?new Date(s.gradedAt).toLocaleString():'')}</span></p>${(s.musts||[]).length?`<ul>${s.musts.map(m=>`<li class="${m.pass?'pass':'fail'}">${m.pass?'✓':'✗'} <span style="color:var(--ink);font-weight:400">${esc(m.item)}</span></li>`).join('')}</ul>`:''}<pre>${esc(s.feedback||'No feedback recorded.')}</pre>`:'<p class="sub">No score yet.</p>'}
+ ${S.canWrite?`<h3 style="margin-top:14px">Enter or correct by hand</h3><div class="row"><label>Theory /30<input id="mT" type="number" min="0" max="30" value="${esc(s.theory??'')}"></label><label>Practical /50<input id="mP" type="number" min="0" max="50" value="${esc(s.practical??'')}"></label><label>Quality /20<input id="mQ" type="number" min="0" max="20" value="${esc(s.quality??'')}"></label></div><label style="margin-top:8px"><input type="checkbox" id="mF" class="cb" style="vertical-align:middle"> A MUST item failed (caps at 69)</label><label style="margin-top:8px">Feedback<textarea id="mFb">${esc(s.feedback||'')}</textarea></label><button class="b" id="mSave" style="margin-top:10px">Save score</button><div class="msg" id="mMsg"></div>`:''}`);
+ const b=$('mSave');if(b)b.onclick=async()=>{b.disabled=true;try{await saveScore(tid,mod,{theory:$('mT').value,practical:$('mP').value,quality:$('mQ').value,musts:$('mF').checked?[{item:'MUST item failed (manual)',pass:false}]:(s.musts||[]),feedback:$('mFb').value,fileId:s.fileId,fileName:s.fileName,gradedBy:'mentor'});closeDlg()}catch(e){say('mMsg','Could not save: '+(e.message||e.code),'fail');b.disabled=false}}}
+
+/* events */
+document.addEventListener('click',async e=>{const el=e.target.closest('[data-day],[data-del],[data-score],[data-grade]');if(!el)return;
+ if(el.dataset.day){openDlg(dayCard(+el.dataset.day));return}
+ if(el.dataset.score){const [t,m]=el.dataset.score.split('|');scoreDialog(t,m);return}
+ if(el.dataset.del){const id=el.dataset.del;openDlg(`<h2>Remove ${esc(id)}?</h2><p>Their scores and DoD ticks stay stored but hidden.</p><button class="b" id="delOk">Remove</button>`);$('delOk').onclick=async()=>{try{await db.doc('trainees/'+id).delete()}catch(x){}closeDlg()};return}
+ if(el.dataset.grade)gradeFile(el.dataset.grade,el)});
+document.addEventListener('change',async e=>{const el=e.target;if(!el.dataset||!el.dataset.dod)return;const [t,k]=el.dataset.dod.split('|');el.disabled=true;
+ try{await db.doc('dod/'+t+'_'+k).set({done:el.checked,note:S.dod[t+'_'+k]?.note||'',by:'mentor',at:new Date().toISOString()})}catch(x){el.checked=!el.checked;say('dbMsg','Could not save that tick.','fail')}el.disabled=false});
+$('exFilter').addEventListener('change',renderExams);
+
+$('tForm').addEventListener('submit',async e=>{e.preventDefault();if(!db)return say('tMsg','Storage is not available in this view.','fail');
+ const id=$('tId').value.trim();if(S.trainees.some(t=>t.id===id))return say('tMsg','That ID already exists.','fail');
+ try{await db.doc('trainees/'+id).set({name:$('tName').value.trim(),email:$('tEmail').value.trim(),team:$('tTeam').value.trim(),active:true,addedAt:new Date().toISOString()});e.target.reset();say('tMsg','Added.','pass')}catch(x){say('tMsg','Could not add: '+(x.message||x.code),'fail')}});
+$('setForm').addEventListener('submit',async e=>{e.preventDefault();if(!db)return;try{await db.doc('settings/program').set({startDate:$('sStart').value,driveFolder:$('sFolder').value.trim(),reportFolder:$('sRep').value.trim()||'DailyReport',coverage:+$('sCov').value||80});say('setMsg','Saved.','pass')}catch(x){say('setMsg','Could not save: '+(x.message||x.code),'fail')}});
+
+/* Google Drive */
+const payload=r=>{let p=r&&(r.payload!==undefined?r.payload:r);if(typeof p==='string'){try{p=JSON.parse(p)}catch(x){}}return p};
+async function drive(tool,input){return payload(await mcp.callTool('Google Drive',tool,input))}
+const qs=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+/* get the connector and the grader on demand, so a slow or failed start never leaves the buttons dead */
+async function ensureCaps(){
+ if(typeof claude==='undefined'||!claude.use)return 'This page is not running inside Claude. Open the portal from its claude.ai artifact link (not a local file or preview).';
+ if(!mcp){try{mcp=await claude.use('mcp')}catch(x){}}
+ if(!sample){try{sample=await claude.use('sample')}catch(x){}}
+ if(!mcp)return 'The Google Drive connector is not available in this view. Open the portal on claude.ai while signed in, and allow Google Drive when asked. Or use the exam-grader agent instead.';
+ return '';}
+const driveErr=e=>{const c=e&&e.code;return c==='needs_reauth'?'Google Drive needs reconnecting: claude.ai Settings → Connectors → Google Drive.':c==='server_not_connected'?'Google Drive is not connected: add it in claude.ai Settings → Connectors.':c==='not_in_manifest'||c==='approval_required'||c==='consent_required'?'Google Drive access was not allowed for this page. Reload and choose Allow.':c==='server_unavailable'?'Google Drive did not answer. Try again in a moment.':'Drive scan failed: '+((e&&(e.message||e.code))||e)};
+async function scanDrive(){
+ const miss=await ensureCaps();if(miss){say('exMsg',miss,'fail');return false}
+ say('exMsg','Looking for the '+S.settings.driveFolder+' folder…');
+ try{
+  const fr=await drive('search_files',{query:`title contains '${qs(S.settings.driveFolder)}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,pageSize:20,excludeContentSnippets:true});
+  const folders=(fr&&fr.files)||[];
+  const root=folders.find(f=>f.title===S.settings.driveFolder)||folders.find(f=>!/exam/i.test(f.title))||folders[0];
+  if(!root){say('exMsg','No Drive folder named '+S.settings.driveFolder+' found. Create it or change the name on Setup.','fail');return false}
+  /* submissions live in the Exams folder only: never list answer keys, banks or templates */
+  const ex=folders.find(f=>f.parentId===root.id&&/exam/i.test(f.title))||folders.find(f=>/exam/i.test(f.title)&&f.id!==root.id);
+  const base=ex||root;
+  let all=[],tok;do{const r=await drive('search_files',{query:`'${qs(base.id)}' in ancestors and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,pageSize:100,excludeContentSnippets:true,...(tok?{pageToken:tok}:{})});all=all.concat((r&&r.files)||[]);tok=r&&r.nextPageToken}while(tok&&all.length<500);
+  S.files=all.map(f=>{const m=/^([A-Za-z0-9-]+)_(.+?)_M([1-6])\b/i.exec(f.title||'');const tid=m?m[1]:null,mod=m?'M'+m[3]:null,who=m?m[2]:'';const s=tid&&S.scores[tid+'_'+mod];
+   return{id:f.id,title:f.title,url:(f.viewUrl||'').startsWith('https://')?f.viewUrl:'',mt:f.modifiedTime,tid,mod,who,graded:s&&s.fileId===f.id&&new Date(s.gradedAt)>=new Date(f.modifiedTime)?String(s.total):''}});
+  say('exMsg',S.files.length+' file(s) found in '+(base.title||S.settings.driveFolder)+'.','pass');renderExams();return true}
+ catch(e){say('exMsg',driveErr(e),'fail');return false}}
+$('scanBtn').addEventListener('click',async()=>{const b=$('scanBtn');b.disabled=true;await scanDrive();b.disabled=false});
+
+/* grade one submission: read it, ask Claude with the rubric, return the result (no saving) */
+async function gradeCore(f){
+ const c=await drive('read_file_content',{fileId:f.id});let text=typeof c==='string'?c:(c&&(c.content||c.text||c.fileContent))||JSON.stringify(c);text=String(text).slice(0,60000);
+ const prompt=`You are the exam grader for a 3-week Go/AWS bootcamp for freshers. Grade this ${f.mod} (${MODS[f.mod].n}) submission strictly against the rubric. Grade only what the submission shows; when a practical item needs code you cannot see, give partial or no credit and say "needs code check".
+RUBRIC (Theory /30 from the theory topics, Practical /50 from the listed items, Code quality /20: lint 5, build 5, tests+coverage 5, PR hygiene 5):
+${RUBRIC[f.mod]}
+Return JSON only: {"theory":number,"practical":number,"quality":number,"musts":[{"item":string,"pass":boolean}],"strengths":[3 strings],"gaps":[3 strings, each with a concrete fix],"remediation":string (empty if likely pass),"humanReview":boolean,"reviewReason":string,"language":"vi" or "en"}. Write feedback in the submission's language.
+SUBMISSION (${f.title}):
+<<<
+${text}
+>>>`;
+ const r=await sample.json(prompt,{modelTier:'complex'});
+ const fb=`Strengths:\n${(r.strengths||[]).map(s=>'• '+s).join('\n')}\n\nGaps and fixes:\n${(r.gaps||[]).map(s=>'• '+s).join('\n')}${r.remediation?'\n\nRemediation plan:\n'+r.remediation:''}`;
+ const theory=+r.theory||0,practical=+r.practical||0,quality=+r.quality||0;let total=Math.round(theory+practical+quality);const mf=(r.musts||[]).some(m=>m.pass===false);if(mf)total=Math.min(total,69);
+ const review=!!r.humanReview||(total>=65&&total<=74);
+ return{r,fb,theory,practical,quality,total,mf,review,reason:r.reviewReason||(total>=65&&total<=74?'Borderline total (65–74)':'')}}
+const gradeErr=e=>e&&e.code==='not_granted'?'AI grading was not allowed in this view.':e&&e.code==='rate_limited'?'Too many grading requests; wait a minute.':'Grading failed: '+((e&&(e.message||e.code))||e);
+
+async function gradeFile(fid,btn){const f=S.files.find(x=>x.id===fid);if(!f)return;
+ const miss=await ensureCaps();if(miss||!sample){say('exMsg',miss||'AI grading is not available in this view.','fail');return}
+ btn.disabled=true;btn.textContent='Grading…';
+ try{const g=await gradeCore(f),{r,fb,theory,practical,quality,total,mf}=g;
+  const t=S.trainees.find(x=>x.id===f.tid);
+  openDlg(`<h2>AI grade · ${esc(t?t.name:f.tid)} · ${f.mod}</h2><p><b class="${total>=70&&!mf?'pass':'fail'}">${total} · ${total>=70&&!mf?'Pass':'Fail'}</b> <span class="sm sub">Theory ${esc(theory)}/30 · Practical ${esc(practical)}/50 · Quality ${esc(quality)}/20</span></p>${g.review?`<p class="fail">Flagged for human review: ${esc(g.reason)}</p>`:''}<ul>${(r.musts||[]).map(m=>`<li class="${m.pass?'pass':'fail'}">${m.pass?'✓':'✗'} <span style="color:var(--ink);font-weight:400">${esc(m.item)}</span></li>`).join('')}</ul><pre>${esc(fb)}</pre>${t?'':'<p class="fail">This trainee ID is not in the roster yet; add them first to keep the score visible.</p>'}<button class="b" id="aiSave" ${S.canWrite?'':'disabled'}>Save this grade</button><div class="msg" id="aiMsg"></div>`);
+  $('aiSave').onclick=async()=>{$('aiSave').disabled=true;try{await saveScore(f.tid,f.mod,{theory,practical,quality,musts:r.musts,feedback:fb,fileId:f.id,fileName:f.title,gradedBy:'AI (portal) · reviewed by mentor'});f.graded=String(total);renderExams();closeDlg()}catch(e){say('aiMsg','Could not save: '+(e.message||e.code),'fail');$('aiSave').disabled=false}}}
+ catch(e){say('exMsg',gradeErr(e),'fail')}
+ btn.disabled=false;btn.textContent=f.graded?'Re-grade':'Grade with AI'}
+
+/* full flow: scan Drive → add unknown trainees → grade every new submission → save → report */
+$('flowBtn').addEventListener('click',async()=>{
+ if(!db||!S.canWrite)return say('exMsg','You need edit access to the portal to run the full flow.','fail');
+ const b=$('flowBtn'),sb=$('scanBtn');b.disabled=sb.disabled=true;
+ try{
+  if(!await scanDrive())return;
+  if(!sample){say('exMsg','AI grading is not available in this view, so only the scan ran.','fail');return}
+  const todo=S.files.filter(x=>x.tid&&x.mod&&!x.graded),skipped=S.files.filter(x=>!x.tid||!x.mod).length;
+  if(!todo.length){say('exMsg',S.files.length+' file(s) scanned. Nothing new to grade'+(skipped?' · '+skipped+' file(s) do not match TraineeID_FullName_M1':'')+'.','pass');return}
+  let ok=0,flagged=[],failed=[],added=[];
+  for(let i=0;i<todo.length;i++){const f=todo[i];say('exMsg','Grading '+(i+1)+' of '+todo.length+': '+f.title+'…');
+   try{
+    if(!S.trainees.some(t=>t.id===f.tid)){const name=(f.who||f.tid).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[-.]+/g,' ').trim();
+     await db.doc('trainees/'+f.tid).set({name,email:'',team:'',active:true,addedAt:new Date().toISOString(),addedFrom:'drive-scan'});S.trainees.push({id:f.tid,name,active:true});added.push(f.tid)}
+    const g=await gradeCore(f);
+    const fb=(g.review?'⚠ NEEDS HUMAN REVIEW: '+g.reason+'\n\n':'')+g.fb;
+    await saveScore(f.tid,f.mod,{theory:g.theory,practical:g.practical,quality:g.quality,musts:g.r.musts,feedback:fb,fileId:f.id,fileName:f.title,gradedBy:'AI (portal full flow)'+(g.review?' · needs review':'')});
+    f.graded=String(g.total);ok++;if(g.review)flagged.push(f.title+' ('+g.total+')');renderExams()}
+   catch(e){failed.push(f.title);if(e&&e.code==='rate_limited'){say('exMsg','Rate limited after '+ok+' graded; run the flow again in a minute.','fail');break}}}
+  say('exMsg','Full flow done: '+ok+' graded and saved'+(added.length?' · '+added.length+' trainee(s) added to the roster ('+added.join(', ')+')':'')+(flagged.length?' · needs human review: '+flagged.join('; '):'')+(failed.length?' · failed: '+failed.join('; '):'')+(skipped?' · '+skipped+' unmatched file(s) skipped':'')+'.',failed.length?'fail':'pass');renderAll();renderExams();
+ }catch(e){say('exMsg',gradeErr(e),'fail')}
+ finally{b.disabled=sb.disabled=false}});
+
+/* Daily progress reports */
+function renderReports(){$('repLbl').textContent=S.settings.reportFolder||'DailyReport';$('repBtn').disabled=!S.canWrite;const tb=$('repTable').tBodies[0];const rows=Object.values(S.progress).sort((a,b)=>String(a.traineeId).localeCompare(String(b.traineeId)));
+ const cls=s=>s==='At risk'?'fail':s==='Watch'?'muted':'pass';
+ tb.innerHTML=rows.length?rows.map(p=>{const t=S.trainees.find(x=>x.id===p.traineeId);const sampleBadge=p.isSample?` <span class="tag" style="--c:#9aa3af;font-size:11px;vertical-align:middle">SAMPLE</span>`:'';return `<tr><td>${p.url?`<a href="${esc(p.url)}">${esc(t?t.name:p.name||p.traineeId)}</a>`:esc(t?t.name:p.name||p.traineeId)}${sampleBadge}<div class="sm sub">${esc(p.traineeId)}</div></td><td class="num">${esc(p.doneWithProof)} / ${esc(p.topicsTotal)}${p.doneNoProof?`<div class="sm fail">${esc(p.doneNoProof)} without proof</div>`:''}</td><td class="num">${esc(p.due)}</td><td class="num">${esc(p.behind)}</td><td class="num">${esc(p.dodMet)} / ${esc(p.dodTotal)}</td><td><b class="${cls(p.status)}">${esc(p.status)}</b></td><td class="sm">${(p.flags||[]).map(f=>'<div>'+esc(f)+'</div>').join('')}</td><td class="sm sub" style="white-space:nowrap">${esc(p.scannedAt?new Date(p.scannedAt).toLocaleString():'')}</td></tr>`}).join(''):'<tr><td colspan="8" class="sub">No reports scanned yet. Select Scan DailyReport.</td></tr>'}
+
+/* the Drive reader returns each tab as a markdown table: pull the rows out by position */
+function parseReport(txt){const cell=c=>c.trim().replace(/\\([\\_<>*|`#\-])/g,'$1');
+ const parts=String(txt).split(/### Sheet Name: /);const tab=n=>{const p=parts.find(x=>x.startsWith(n));if(!p)return[];const body=p.split('### Table Columns:')[0];
+  return body.split('\n').filter(l=>/^\|/.test(l)&&!/^\|\s*:?-/.test(l)).map(l=>l.replace(/^\|/,'').replace(/\|\s*$/,'').split(/(?<!\\)\|/).map(cell))};
+ const prof={};for(const r of tab('Profile'))if(r[0])prof[r[0]]=r[1]||'';
+ const topics=tab('Topic Tracker').filter(r=>/^\d+$/.test(r[0])).map(r=>({day:+r[0],mod:r[2],topic:r[3],status:r[5]||'Not started',proof:/^https?:\/\//i.test(r[7]||'')}));
+ const dod=tab('DoD Checklist').filter(r=>/^M[1-6]$/.test(r[0])).map(r=>({mod:r[0],item:r[2],type:r[3],met:r[5]||''}));
+ return{prof,topics,dod}}
+
+function renderScanSummary({matched,unmatched,failed,scannedAt}){
+ const el=$('repSummary');if(!el)return;
+ const p=[];
+ p.push(`<div class="pass" style="font-weight:700;margin-bottom:6px">✓ ${matched} sheet(s) updated · ${new Date(scannedAt).toLocaleString()}</div>`);
+ if(unmatched.length){p.push(`<div style="margin-top:8px"><b class="fail">Flagged / unmatched (${unmatched.length}):</b></div>`);for(const u of unmatched)p.push(`<div class="sm fail" style="margin-left:12px">${esc(u.title)} — ${esc(u.reason)}</div>`)}
+ if(failed.length){p.push(`<div style="margin-top:8px"><b class="fail">Failed reads (${failed.length}):</b></div>`);for(const f of failed)p.push(`<div class="sm fail" style="margin-left:12px">${esc(f.title)} (${esc(f.errorCode)})</div>`)}
+ el.innerHTML=p.join('');el.style.display='block'}
+
+async function scanReports(){
+ const miss=await ensureCaps();if(miss){say('repMsg',miss,'fail');return}
+ if(!db||!S.canWrite){say('repMsg','Edit access is required to run a scan.','fail');return}
+ $('repSummary').style.display='none';say('repMsg','Scanning DailyReport folder…');
+ try{
+  let all=[],tok;do{const r=await drive('search_files',{query:`'${qs(DAILY_REPORT_FOLDER_ID)}' in ancestors and mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,pageSize:100,excludeContentSnippets:true,...(tok?{pageToken:tok}:{})});all=all.concat((r&&r.files)||[]);tok=r&&r.nextPageToken}while(tok&&all.length<300);
+  if(!all.length){say('repMsg','The DailyReport folder has no progress sheets yet.','pass');return}
+  const day=workDay(),now=new Date().toISOString();
+  const matched=[],unmatched=[],failed=[];
+  for(let i=0;i<all.length;i++){const f=all[i];say('repMsg','Reading '+(i+1)+' of '+all.length+': '+f.title+'…');
+   try{const c=await drive('read_file_content',{fileId:f.id});const txt=typeof c==='string'?c:(c&&(c.fileContent||c.content||c.text))||'';
+    const {prof,topics,dod}=parseReport(txt);
+    const fm=/^([A-Za-z0-9-]+)_(.+?)_Progress/i.exec(f.title||'');
+    const tid=(prof['Trainee ID']||'').trim()||(fm&&fm[1])||'';
+    if(!tid||!/^[A-Za-z0-9-]+$/.test(tid)){unmatched.push({title:f.title,fileId:f.id,reason:'no TraineeID found'});continue}
+    if(!S.trainees.some(t=>t.id===tid)){unmatched.push({title:f.title,fileId:f.id,reason:'unknown trainee ID: '+tid});continue}
+    if(!topics.length){unmatched.push({title:f.title,fileId:f.id,reason:'incomplete sheet: missing Topic Tracker tab'});continue}
+    const pname=(prof['Full name']||'').trim()||(fm?fm[2].replace(/([a-z])([A-Z])/g,'$1 $2'):tid);
+    matched.push({tid,pname,f,prof,topics,dod})}
+   catch(e){failed.push({title:f.title,fileId:f.id,errorCode:(e&&e.code)||'error'})}}
+  /* duplicate detection */
+  const tidMap={};for(const e of matched){if(!tidMap[e.tid])tidMap[e.tid]=[];tidMap[e.tid].push(e)}
+  const deduped=[];for(const [tid,entries] of Object.entries(tidMap)){
+   if(entries.length>1){for(const e of entries)unmatched.push({title:e.f.title,fileId:e.f.id,reason:'duplicate sheets for trainee '+tid})}
+   else deduped.push(entries[0])}
+  /* write progress records */
+  let ok=0;
+  for(const {tid,pname,f,prof,topics,dod} of deduped){
+   const existing=S.progress[tid];if(existing&&existing.isSample===true){unmatched.push({title:f.title,fileId:f.id,reason:'sample record exists for '+tid+' — not overwritten'});continue}
+   const done=topics.filter(t=>t.status==='Done'),dp=done.filter(t=>t.proof).length,dueT=topics.filter(t=>t.day<=day),behind=dueT.filter(t=>!(t.status==='Done'&&t.proof)).length;
+   const dodMet=dod.filter(d=>d.met==='Yes').length,mustNo=dod.filter(d=>d.type==='MUST'&&d.met==='No');
+   const flags=[];if(done.length-dp)flags.push((done.length-dp)+' topic(s) marked Done with no evidence link');
+   const early=done.filter(t=>t.day>Math.max(day,0));if(early.length)flags.push(early.length+' topic(s) marked Done before their day');
+   if(mustNo.length)flags.push('MUST not met: '+mustNo.map(d=>d.mod).join(', '));
+   const gaps=['Squad','Mentor','Repo / capstone link'].filter(k=>!(prof[k]||'').trim());if(gaps.length)flags.push('Profile missing: '+gaps.join(', '));
+   const status=mustNo.length||behind>=6?'At risk':behind>=3?'Watch':'On track';
+   await db.doc('progress/'+tid).set({traineeId:tid,name:pname,sheetId:f.id,sheetName:f.title,url:(f.viewUrl||'').startsWith('https://')?f.viewUrl:'',scannedAt:now,bootcampDay:day,topicsTotal:topics.length,topicsDone:done.length,doneWithProof:dp,doneNoProof:done.length-dp,due:dueT.length,behind,dodMet,dodTotal:dod.length,flags,status,by:'portal scan'});ok++}
+  say('repMsg','');renderScanSummary({matched:ok,unmatched,failed,scannedAt:now})}
+ catch(e){say('repMsg',driveErr(e).replace('Drive scan failed','DailyReport scan failed')+(e&&(e.code==='not_found'||e.code==='forbidden')?' Check that the DailyReport folder has not been moved or its permissions changed.':''),'fail')}}
+$('repBtn').addEventListener('click',async()=>{const b=$('repBtn');b.disabled=true;await scanReports();b.disabled=false});
+
+/* team */
+$('agents').innerHTML=AGENTS.map(([n,m,d])=>`<div class="card" style="--c:${MODS[m].c}"><h3>${esc(n)}</h3><div class="sm">${esc(d)}</div></div>`).join('');
+$('skills').innerHTML=SKILLS.map(([c,d,w])=>`<tr><td><code>${esc(c)}</code></td><td>${esc(d)}</td><td>${esc(w)}</td></tr>`).join('');
+
+renderTimeline();renderAll();route();
+
+/* live data */
+(async()=>{
+ try{const u=await claude.use('user');if(u&&u.can){const w=await u.can('data.write');if(w===false)S.canWrite=false}}catch(x){}
+ try{[mcp,sample]=await Promise.all([claude.use('mcp').catch(()=>null),claude.use('sample').catch(()=>null)])}catch(x){}renderExams();
+ db=await claude.use('db');
+ if(!db){say('dbMsg','Shared storage is not available in this view — showing the plan only. Open the portal on claude.ai while signed in.','fail');return}
+ const timer=setTimeout(()=>say('dbMsg','Still waiting for portal data — it may be out of date.','muted'),10000);
+ const ok=()=>{clearTimeout(timer);if($('dbMsg').textContent.startsWith('Still'))say('dbMsg','')};
+ const err=e=>{clearTimeout(timer);say('dbMsg','Portal data stopped updating ('+e.code+'). Reload to reconnect.','fail')};
+ db.collection('trainees').onSnapshot(s=>{if(!s.metadata.fromCache)ok();S.trainees=s.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>String(a.id).localeCompare(String(b.id)));renderAll()},err);
+ db.collection('scores').onSnapshot(s=>{S.scores={};s.docs.forEach(d=>S.scores[d.id]=d.data());renderAll()},err);
+ db.collection('dod').onSnapshot(s=>{S.dod={};s.docs.forEach(d=>S.dod[d.id]=d.data());renderAll()},err);
+ db.collection('progress').onSnapshot(s=>{S.progress={};s.docs.forEach(d=>S.progress[d.id]=d.data());renderAll()},err);
+ db.doc('settings/program').onSnapshot(s=>{if(s.exists)S.settings={...S.settings,...s.data()};renderAll();renderTimeline()},err);
+ renderExams();
+})();
+}
+</script>
+</body>
+</html>

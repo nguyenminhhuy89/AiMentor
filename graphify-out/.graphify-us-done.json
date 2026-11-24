@@ -1,0 +1,12 @@
+{
+  "/Users/nguyenminhhuy/Documents/AiMentor/specs/001-dailyreport-drive-scan/tasks.md": [
+    "User Story 1 — Mentor sees real per-trainee progress on demand",
+    "User Story 2 — Mentor warned about unmatched sheets",
+    "User Story 3 — Sample data never looks like a real scan"
+  ],
+  "/Users/nguyenminhhuy/Documents/AiMentor/specs/003-healer-agent/tasks.md": [
+    "User Story 1 — Run a Full Platform Health Check",
+    "User Story 2 — Pre-flight Check Before Full-flow",
+    "User Story 3 — Review What Needs Human Action"
+  ]
+}

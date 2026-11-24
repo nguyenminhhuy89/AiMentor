@@ -1,0 +1,7 @@
+{
+  "name": "ai-mentor",
+  "version": "0.2.0",
+  "description": "AI training team for a 3-week cloud-native Go bootcamp: mentor lead, six module tutors, exam grader (Google Drive) and DoD auditor, synced with the AiMentor portal.",
+  "author": { "name": "Huy" },
+  "keywords": ["training", "mentor", "go", "aws", "exam-grading"]
+}
